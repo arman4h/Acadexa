@@ -4,17 +4,18 @@ import { useState } from "react";
 import { SectionTitle } from "../components/ui/SectionTitle";
 import { CourseCard } from "../components/ui/CourseCard";
 import { Input } from "../components/ui/Input";
-import { SkeletonLoader, CardSkeleton } from "../components/ui/SkeletonLoader";
+import { CardSkeleton } from "../components/ui/SkeletonLoader";
 import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/ui/EmptyState";
-import { useSemester } from "../hooks/useSemesters";
-import { useCoursesBySemester } from "../hooks/useCourses";
+import { useTrimester } from "../hooks/useTrimesters";
+import { useCoursesByTrimester } from "../hooks/useCourses";
 import type { Course } from "../types";
 
-export function SemesterPage() {
+export function TrimesterPage() {
   const { id } = useParams<{ id: string }>();
-  const { data: semester, isLoading: semesterLoading } = useSemester(id!);
-  const { data: courses, isLoading: coursesLoading, error, refetch } = useCoursesBySemester(id!);
+  const trimesterNum = parseInt(id ?? "0");
+  const { data: trimester, isLoading: trimesterLoading } = useTrimester(id!);
+  const { data: courses, isLoading: coursesLoading, error, refetch } = useCoursesByTrimester(trimesterNum);
   const [search, setSearch] = useState("");
 
   const filtered = (courses ?? []).filter(
@@ -23,26 +24,30 @@ export function SemesterPage() {
       c.course_code.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (semesterLoading) {
+  if (trimesterLoading) {
     return (
       <div className="mx-auto max-w-6xl px-6 py-12">
-        <SkeletonLoader count={1} height="h-8" width="w-48" />
+        <div className="h-8 w-48 bg-[#EAECEF]/60 rounded animate-pulse mb-8" />
       </div>
     );
+  }
+
+  if (!trimester) {
+    return <EmptyState title="Trimester not found" />;
   }
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
       <Link
-        to="/semesters"
+        to="/trimesters"
         className="inline-flex items-center gap-1 text-sm text-[#6B7280] hover:text-[#4F7CFF] transition-colors duration-150 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to semesters
+        Back to trimesters
       </Link>
 
       <SectionTitle subtitle={`${courses?.length ?? 0} courses available`}>
-        {semester?.name ?? "Semester"}
+        {trimester.name}
       </SectionTitle>
 
       <div className="max-w-md mb-8">
@@ -56,9 +61,7 @@ export function SemesterPage() {
 
       {coursesLoading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <CardSkeleton />
-          <CardSkeleton />
-          <CardSkeleton />
+          <CardSkeleton /><CardSkeleton /><CardSkeleton />
         </div>
       )}
 
@@ -67,7 +70,7 @@ export function SemesterPage() {
       {!coursesLoading && !error && filtered.length === 0 && (
         <EmptyState
           title="No courses found"
-          description={search ? "Try a different search term." : "No courses available for this semester yet."}
+          description={search ? "Try a different search term." : "No courses available for this trimester yet."}
         />
       )}
 

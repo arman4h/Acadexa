@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, User } from "lucide-react";
 import type { Resource } from "../../types";
 import { getResourceIcon, getResourceTypeLabel } from "../../utils/resourceHelpers";
 import { Badge } from "./Badge";
@@ -23,9 +23,17 @@ export function ResourceCard({ resource }: ResourceCardProps) {
               <h4 className="font-semibold text-[#1F2937] truncate">
                 {resource.title}
               </h4>
-              <Badge variant="primary" >
-                {getResourceTypeLabel(resource.type)}
-              </Badge>
+              <div className="flex items-center gap-2 mt-1">
+                <Badge variant="primary">
+                  {getResourceTypeLabel(resource.type)}
+                </Badge>
+                {resource.author && (
+                  <span className="inline-flex items-center gap-1 text-xs text-[#6B7280]">
+                    <User className="w-3 h-3" />
+                    {resource.author}
+                  </span>
+                )}
+              </div>
             </div>
             <Button
               variant="secondary"

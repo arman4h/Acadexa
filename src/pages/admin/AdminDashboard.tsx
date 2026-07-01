@@ -1,0 +1,50 @@
+import { useQuery } from "@tanstack/react-query";
+import { GraduationCap, FolderOpen, UserCheck } from "lucide-react";
+import { Link } from "react-router-dom";
+import { getAllCourses } from "../../services/courseService";
+import { getContributions } from "../../services/resourceService";
+
+export function AdminDashboard() {
+  const { data: courses } = useQuery({ queryKey: ["courses", "all"], queryFn: getAllCourses });
+  const { data: contributions } = useQuery({ queryKey: ["contributions"], queryFn: getContributions });
+
+  const resourceCount = courses?.reduce((s, c) => s + (c.resource_count ?? 0), 0) ?? 0;
+
+  const stats = [
+    { label: "Courses", value: courses?.length ?? 0, icon: GraduationCap, href: "/admin/courses", color: "text-emerald-600 bg-emerald-100" },
+    { label: "Resources", value: resourceCount, icon: FolderOpen, href: "/admin/resources", color: "text-amber-600 bg-amber-100" },
+    { label: "Pending Contributions", value: contributions?.length ?? 0, icon: UserCheck, href: "/admin/contributions", color: "text-blue-600 bg-blue-100" },
+  ];
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold text-[#1F2937] mb-8">Admin Dashboard</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        {stats.map((stat) => (
+          <Link key={stat.label} to={stat.href} className="rounded-2xl border border-[#EAECEF] bg-white p-5 transition-all duration-150 hover:shadow-md">
+            <div className={`rounded-xl p-2.5 w-fit mb-3 ${stat.color}`}>
+              <stat.icon className="w-5 h-5" />
+            </div>
+            <p className="text-2xl font-bold text-[#1F2937]">{stat.value}</p>
+            <p className="text-sm text-[#6B7280] mt-0.5">{stat.label}</p>
+          </Link>
+        ))}
+      </div>
+
+      <div className="rounded-2xl border border-[#EAECEF] bg-white p-5">
+        <h2 className="font-semibold text-[#1F2937] mb-2">Quick Actions</h2>
+        <div className="flex flex-wrap gap-2 mt-3">
+          {[
+            { label: "Manage Courses", href: "/admin/courses" },
+            { label: "Manage Resources", href: "/admin/resources" },
+            { label: "Review Contributions", href: "/admin/contributions" },
+          ].map((action) => (
+            <Link key={action.href} to={action.href} className="px-4 py-2 rounded-xl bg-[#4F7CFF]/10 text-[#4F7CFF] text-sm font-medium hover:bg-[#4F7CFF]/20 transition-all duration-150">
+              {action.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

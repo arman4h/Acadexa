@@ -23,15 +23,12 @@ export function CourseCard({ course }: CourseCardProps) {
       <p className="text-sm text-[#4F7CFF] font-medium mt-0.5">
         {course.course_code}
       </p>
-      {course.faculty && (
-        <p className="text-sm text-[#6B7280] mt-2">{course.faculty.name}</p>
-      )}
       <div className="flex items-center gap-2 mt-3">
         <Badge variant="primary">
           {course.resource_count ?? 0} resources
         </Badge>
-        {course.semester && (
-          <Badge>{course.semester.name}</Badge>
+        {course.trimester && (
+          <Badge>Trimester {course.trimester}</Badge>
         )}
       </div>
     </Link>

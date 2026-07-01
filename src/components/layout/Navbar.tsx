@@ -3,7 +3,7 @@ import { Search, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const links = [
-  { to: "/semesters", label: "Semesters" },
+  { to: "/trimesters", label: "Trimesters" },
   { to: "/search", label: "Search" },
   { to: "/about", label: "About" },
   { to: "/contribute", label: "Contribute" },

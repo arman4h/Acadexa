@@ -1,16 +1,16 @@
 import { SectionTitle } from "../components/ui/SectionTitle";
-import { SemesterCard } from "../components/ui/SemesterCard";
+import { TrimesterCard } from "../components/ui/TrimesterCard";
 import { SkeletonLoader } from "../components/ui/SkeletonLoader";
 import { ErrorState } from "../components/ui/ErrorState";
-import { useSemesters } from "../hooks/useSemesters";
+import { useTrimesters } from "../hooks/useTrimesters";
 
-export function Semesters() {
-  const { data: semesters, isLoading, error, refetch } = useSemesters();
+export function Trimesters() {
+  const { data: trimesters, isLoading, error, refetch } = useTrimesters();
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
-      <SectionTitle subtitle="Browse all semesters and find the courses you need.">
-        Semesters
+      <SectionTitle subtitle="Browse all trimesters and find the courses you need.">
+        Trimesters
       </SectionTitle>
 
       {isLoading && (
@@ -21,10 +21,10 @@ export function Semesters() {
 
       {error && <ErrorState message={error.message} onRetry={() => refetch()} />}
 
-      {semesters && (
+      {trimesters && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {semesters.map((semester) => (
-            <SemesterCard key={semester.id} semester={semester} />
+          {trimesters.map((trimester) => (
+            <TrimesterCard key={trimester.id} trimester={trimester} />
           ))}
         </div>
       )}

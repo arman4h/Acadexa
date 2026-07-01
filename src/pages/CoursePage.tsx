@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, BookOpen, User, Lightbulb, GraduationCap } from "lucide-react";
+import { ArrowLeft, BookOpen, Lightbulb, GraduationCap, Users } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "../components/ui/Badge";
 import { Tabs } from "../components/ui/Tabs";
@@ -8,7 +8,7 @@ import { SkeletonLoader } from "../components/ui/SkeletonLoader";
 import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/ui/EmptyState";
 import { useCourse } from "../hooks/useCourses";
-import { useResourcesByCourse } from "../hooks/useResources";
+import { useResourcesByCourse, useContributorsByCourse } from "../hooks/useResources";
 import { getResourceTypeLabel } from "../utils/resourceHelpers";
 import type { ResourceType, Resource } from "../types";
 
@@ -27,6 +27,7 @@ export function CoursePage() {
   const { id } = useParams<{ id: string }>();
   const { data: course, isLoading: courseLoading } = useCourse(id!);
   const { data: resources, isLoading: resourcesLoading, error, refetch } = useResourcesByCourse(id!);
+  const { data: contributors } = useContributorsByCourse(id!);
   const [activeTab, setActiveTab] = useState("all");
 
   if (courseLoading) {
@@ -57,11 +58,11 @@ export function CoursePage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
       <Link
-        to={`/semester/${course.semester_id}`}
+        to={`/trimester/${course.trimester}`}
         className="inline-flex items-center gap-1 text-sm text-[#6B7280] hover:text-[#4F7CFF] transition-colors duration-150 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to {course.semester?.name ?? "semester"}
+        Back to Trimester {course.trimester}
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-8">
@@ -73,9 +74,7 @@ export function CoursePage() {
             </div>
             <h2 className="font-semibold text-lg text-[#1F2937]">{course.course_name}</h2>
             <p className="text-sm text-[#4F7CFF] font-medium mt-0.5">{course.course_code}</p>
-            {course.semester && (
-              <Badge className="mt-3">{course.semester.name}</Badge>
-            )}
+            <Badge className="mt-3">Trimester {course.trimester}</Badge>
           </div>
 
           <div className="rounded-2xl border border-[#EAECEF] bg-white p-5">
@@ -127,24 +126,17 @@ export function CoursePage() {
             </div>
           </div>
 
-          <Tabs
-            tabs={resourceTabs}
-            activeTab={activeTab}
-            onChange={setActiveTab}
-          />
+          <Tabs tabs={resourceTabs} activeTab={activeTab} onChange={setActiveTab} />
 
           <div className="mt-6 space-y-4">
             {resourcesLoading && <SkeletonLoader count={3} height="h-24" />}
-
             {error && <ErrorState message={error.message} onRetry={() => refetch()} />}
-
             {!resourcesLoading && !error && filteredResources.length === 0 && (
               <EmptyState
                 title="No resources found"
                 description={activeTab === "all" ? "No resources added for this course yet." : `No ${getResourceTypeLabel(activeTab as ResourceType).toLowerCase()} resources available.`}
               />
             )}
-
             {!resourcesLoading && filteredResources.map((resource: Resource) => (
               <ResourceCard key={resource.id} resource={resource} />
             ))}
@@ -153,22 +145,33 @@ export function CoursePage() {
 
         {/* Right Sidebar */}
         <aside className="space-y-6">
-          {course.faculty && (
-            <div className="rounded-2xl border border-[#EAECEF] bg-white p-5">
-              <h3 className="font-semibold text-sm text-[#1F2937] mb-3">Faculty</h3>
-              <div className="flex items-start gap-3">
-                <div className="rounded-xl bg-[#EAECEF]/50 p-2.5">
-                  <User className="w-5 h-5 text-[#6B7280]" />
-                </div>
-                <div>
-                  <p className="font-medium text-sm text-[#1F2937]">{course.faculty.name}</p>
-                  {course.faculty.email && (
-                    <p className="text-xs text-[#6B7280] mt-0.5">{course.faculty.email}</p>
-                  )}
-                </div>
-              </div>
+          <div className="rounded-2xl border border-[#EAECEF] bg-white p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <Users className="w-4 h-4 text-[#6B7280]" />
+              <h3 className="font-semibold text-sm text-[#1F2937]">Contributors</h3>
             </div>
-          )}
+            {contributors && contributors.length > 0 ? (
+              <ul className="space-y-2">
+                {contributors.map((c, i) => (
+                  <li key={i}>
+                    {c.url ? (
+                      <a href={c.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#4F7CFF] transition-colors duration-150">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#4F7CFF] shrink-0" />
+                        {c.name}
+                      </a>
+                    ) : (
+                      <span className="flex items-center gap-2 text-sm text-[#6B7280]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#4F7CFF] shrink-0" />
+                        {c.name}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-[#6B7280]">No contributors yet.</p>
+            )}
+          </div>
 
           <div className="rounded-2xl border border-[#EAECEF] bg-white p-5">
             <div className="flex items-center gap-2 mb-3">
@@ -176,18 +179,9 @@ export function CoursePage() {
               <h3 className="font-semibold text-sm text-[#1F2937]">Tips</h3>
             </div>
             <ul className="space-y-2 text-sm text-[#6B7280]">
-              <li className="flex gap-2">
-                <span className="text-[#4F7CFF]">•</span>
-                <span>Use the tabs to filter resources by type.</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-[#4F7CFF]">•</span>
-                <span>All resources open in a new tab.</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-[#4F7CFF]">•</span>
-                <span>Resources are contributed by fellow students.</span>
-              </li>
+              <li className="flex gap-2"><span className="text-[#4F7CFF]">•</span><span>Use the tabs to filter resources by type.</span></li>
+              <li className="flex gap-2"><span className="text-[#4F7CFF]">•</span><span>All resources open in a new tab.</span></li>
+              <li className="flex gap-2"><span className="text-[#4F7CFF]">•</span><span>Authors and contributors are credited on each resource.</span></li>
             </ul>
           </div>
         </aside>

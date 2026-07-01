@@ -1,25 +1,16 @@
-export interface Semester {
+export interface Trimester {
   id: string;
   name: string;
   order: number;
   course_count?: number;
 }
 
-export interface Faculty {
-  id: string;
-  name: string;
-  email?: string;
-}
-
 export interface Course {
   id: string;
-  semester_id: string;
-  faculty_id: string;
+  trimester: number;
   course_code: string;
   course_name: string;
   description?: string;
-  semester?: Semester;
-  faculty?: Faculty;
   resource_count?: number;
 }
 
@@ -41,14 +32,20 @@ export interface Resource {
   title: string;
   description?: string;
   url: string;
+  author?: string;
+  contributor_name?: string;
+  contributor_url?: string;
 }
 
 export interface Contribution {
   id?: string;
   course_id: string;
-  resource_type: ResourceType;
+  type: ResourceType;
   title: string;
   description?: string;
   url: string;
+  author?: string;
+  contributor_name?: string;
+  contributor_url?: string;
   created_at?: string;
 }

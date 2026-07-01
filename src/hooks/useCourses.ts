@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  getCoursesBySemester,
+  getCoursesByTrimester,
   getCourseById,
   searchCourses,
 } from "../services/courseService";
 
-export function useCoursesBySemester(semesterId: string) {
+export function useCoursesByTrimester(trimesterNumber: number) {
   return useQuery({
-    queryKey: ["courses", "semester", semesterId],
-    queryFn: () => getCoursesBySemester(semesterId),
-    enabled: !!semesterId,
+    queryKey: ["courses", "trimester", trimesterNumber],
+    queryFn: () => getCoursesByTrimester(trimesterNumber),
+    enabled: trimesterNumber >= 1 && trimesterNumber <= 12,
   });
 }
 
