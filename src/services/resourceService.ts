@@ -42,13 +42,23 @@ export async function createResource(data: {
 }
 
 export async function updateResource(id: string, data: {
-  type?: string; title?: string; description?: string; url?: string;
+  course_id?: string; type?: string; title?: string; description?: string; url?: string;
   author?: string; contributor_name?: string; contributor_url?: string;
 }): Promise<Resource | null> {
   if (!isSupabaseConfigured) return mock.updateResource(id, data);
 
+  const updateFields: Record<string, unknown> = {};
+  if (data.course_id !== undefined) updateFields.course_id = parseInt(data.course_id);
+  if (data.type !== undefined) updateFields.type = data.type;
+  if (data.title !== undefined) updateFields.title = data.title;
+  if (data.description !== undefined) updateFields.description = data.description;
+  if (data.url !== undefined) updateFields.url = data.url;
+  if (data.author !== undefined) updateFields.author = data.author;
+  if (data.contributor_name !== undefined) updateFields.contributor_name = data.contributor_name;
+  if (data.contributor_url !== undefined) updateFields.contributor_url = data.contributor_url;
+
   const { data: result, error } = await supabase!
-    .from("resource").update(data).eq("id", parseInt(id)).select().single();
+    .from("resource").update(updateFields).eq("id", parseInt(id)).select().single();
   if (error) throw error;
   return result ? { ...result, id: String(result.id), course_id: String(result.course_id) } : null;
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Pencil, Trash2, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, AlertCircle } from "lucide-react";
 import { getAllCourses } from "../../services/courseService";
 import { getResourcesByCourse, createResource, updateResource, deleteResource } from "../../services/resourceService";
 import { Button } from "../../components/ui/Button";
@@ -29,20 +29,25 @@ export function AdminResources() {
   const [author, setAuthor] = useState("");
   const [contributorName, setContributorName] = useState("");
   const [contributorUrl, setContributorUrl] = useState("");
+  const [error, setError] = useState("");
 
   const createMut = useMutation({
     mutationFn: () => createResource({ course_id: courseId, type, title, description: description || undefined, url, author: author || undefined, contributor_name: contributorName || undefined, contributor_url: contributorUrl || undefined }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["resources"] }); resetForm(); },
+    onError: (e) => setError(e instanceof Error ? e.message : "Failed to create resource"),
   });
 
   const updateMut = useMutation({
-    mutationFn: () => updateResource(editing!.id, { type, title, description: description || undefined, url, author: author || undefined, contributor_name: contributorName || undefined, contributor_url: contributorUrl || undefined }),
+    mutationFn: (data: { id: string; course_id: string; type: string; title: string; url: string; description?: string; author?: string; contributor_name?: string; contributor_url?: string }) =>
+      updateResource(data.id, { course_id: data.course_id, type: data.type, title: data.title, description: data.description, url: data.url, author: data.author, contributor_name: data.contributor_name, contributor_url: data.contributor_url }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["resources"] }); resetForm(); },
+    onError: (e) => setError(e instanceof Error ? e.message : "Failed to update resource"),
   });
 
   const deleteMut = useMutation({
     mutationFn: (id: string) => deleteResource(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["resources"] }),
+    onError: (e) => setError(e instanceof Error ? e.message : "Failed to delete resource"),
   });
 
   function resetForm() { setShowForm(false); setEditing(null); setCourseId(""); setType("website"); setTitle(""); setDescription(""); setUrl(""); setAuthor(""); setContributorName(""); setContributorUrl(""); }
@@ -81,6 +86,13 @@ export function AdminResources() {
           {courses?.map((c) => <option key={c.id} value={c.id}>{c.course_code} — {c.course_name}</option>)}
         </select>
       </div>
+
+      {error && (
+        <div className="flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 px-4 py-3 text-sm mb-4">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          {error}
+        </div>
+      )}
 
       {showForm && (
         <div className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-5 mb-6">
@@ -125,7 +137,7 @@ export function AdminResources() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => (editing ? updateMut : createMut).mutate()} disabled={createMut.isPending || updateMut.isPending || !title || !url || !courseId}>
+            <Button onClick={() => editing ? updateMut.mutate({ id: editing.id, course_id: courseId, type, title, url, description: description || undefined, author: author || undefined, contributor_name: contributorName || undefined, contributor_url: contributorUrl || undefined }) : createMut.mutate()} disabled={createMut.isPending || updateMut.isPending || !title || !url || !courseId}>
               {editing ? "Save" : "Create"}
             </Button>
             <Button variant="secondary" onClick={resetForm}>Cancel</Button>

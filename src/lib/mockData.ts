@@ -218,18 +218,26 @@ export function createResource(data: {
 }
 
 export function updateResource(id: string, data: {
-  type?: string; title?: string; description?: string; url?: string;
+  course_id?: string; type?: string; title?: string; description?: string; url?: string;
   author?: string; contributor_name?: string; contributor_url?: string;
 }): Resource | null {
   for (const courseId of Object.keys(resourcesByCourse)) {
     const idx = resourcesByCourse[courseId].findIndex((r) => r.id === id);
     if (idx !== -1) {
-      resourcesByCourse[courseId][idx] = {
+      const updated = {
         ...resourcesByCourse[courseId][idx],
         ...data,
         type: (data.type ?? resourcesByCourse[courseId][idx].type) as Resource["type"],
       };
-      return resourcesByCourse[courseId][idx];
+      if (data.course_id && data.course_id !== courseId) {
+        resourcesByCourse[courseId].splice(idx, 1);
+        if (!resourcesByCourse[data.course_id]) resourcesByCourse[data.course_id] = [];
+        resourcesByCourse[data.course_id].push(updated);
+      } else {
+        resourcesByCourse[courseId][idx] = updated;
+      }
+      recalcCounts();
+      return updated;
     }
   }
   return null;

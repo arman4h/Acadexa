@@ -85,8 +85,14 @@ export async function updateCourse(id: string, data: {
 }): Promise<Course | null> {
   if (!isSupabaseConfigured) return mock.updateCourse(id, data);
 
+  const updateFields: Record<string, unknown> = {};
+  if (data.trimester !== undefined) updateFields.trimester = data.trimester;
+  if (data.course_code !== undefined) updateFields.course_code = data.course_code;
+  if (data.course_name !== undefined) updateFields.course_name = data.course_name;
+  if (data.description !== undefined) updateFields.description = data.description;
+
   const { data: result, error } = await supabase!
-    .from("course").update(data).eq("id", parseInt(id)).select().single();
+    .from("course").update(updateFields).eq("id", parseInt(id)).select().single();
   if (error) throw error;
   return result ? { id: String(result.id), trimester: result.trimester, course_code: result.course_code, course_name: result.course_name, description: result.description } : null;
 }
