@@ -2,19 +2,29 @@ import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import * as mock from "../lib/mockData";
 import type { Course } from "../types";
 
+async function attachResourceCounts(courses: Course[]): Promise<Course[]> {
+  if (courses.length === 0) return courses;
+  const { data: rows, error } = await supabase!
+    .from("resource").select("course_id");
+  if (error) throw error;
+  const counts = new Map<number, number>();
+  for (const r of rows ?? []) {
+    counts.set(r.course_id, (counts.get(r.course_id) ?? 0) + 1);
+  }
+  return courses.map((c) => ({ ...c, resource_count: counts.get(parseInt(c.id)) ?? 0 }));
+}
+
 export async function getCoursesByTrimester(trimesterNumber: number): Promise<Course[]> {
   if (!isSupabaseConfigured) return mock.getCoursesByTrimester(trimesterNumber);
 
   const { data, error } = await supabase!
-    .from("course")
-    .select("*, resource:resource(count)")
-    .eq("trimester", trimesterNumber);
+    .from("course").select("*").eq("trimester", trimesterNumber);
   if (error) throw error;
-  return (data ?? []).map((c) => ({
+  const courses = (data ?? []).map((c) => ({
     id: String(c.id), trimester: c.trimester,
     course_code: c.course_code, course_name: c.course_name, description: c.description,
-    resource_count: c.resource?.[0]?.count ?? 0,
   }));
+  return attachResourceCounts(courses);
 }
 
 export async function getCourseById(id: string): Promise<Course | null> {
@@ -24,23 +34,25 @@ export async function getCourseById(id: string): Promise<Course | null> {
     .from("course").select("*").eq("id", parseInt(id)).single();
   if (error) throw error;
   if (!data) return null;
-  return {
+  const course: Course = {
     id: String(data.id), trimester: data.trimester,
     course_code: data.course_code, course_name: data.course_name, description: data.description,
   };
+  const [withCount] = await attachResourceCounts([course]);
+  return withCount;
 }
 
 export async function getAllCourses(): Promise<Course[]> {
   if (!isSupabaseConfigured) return mock.getAllCourses();
 
   const { data, error } = await supabase!
-    .from("course").select("*, resource:resource(count)");
+    .from("course").select("*");
   if (error) throw error;
-  return (data ?? []).map((c: any) => ({
+  const courses = (data ?? []).map((c: any) => ({
     id: String(c.id), trimester: c.trimester,
     course_code: c.course_code, course_name: c.course_name, description: c.description,
-    resource_count: c.resource?.[0]?.count ?? 0,
   }));
+  return attachResourceCounts(courses);
 }
 
 export async function searchCourses(query: string): Promise<Course[]> {
@@ -50,10 +62,11 @@ export async function searchCourses(query: string): Promise<Course[]> {
     .from("course").select("*")
     .or(`course_name.ilike.%${query}%,course_code.ilike.%${query}%`);
   if (error) throw error;
-  return (data ?? []).map((c) => ({
+  const courses = (data ?? []).map((c) => ({
     id: String(c.id), trimester: c.trimester,
     course_code: c.course_code, course_name: c.course_name, description: c.description,
   }));
+  return attachResourceCounts(courses);
 }
 
 export async function createCourse(data: {
@@ -64,7 +77,7 @@ export async function createCourse(data: {
   const { data: result, error } = await supabase!
     .from("course").insert(data).select().single();
   if (error) throw error;
-  return { id: String(result.id), trimester: result.trimester, course_code: result.course_code, course_name: result.course_name, description: result.description };
+  return { id: String(result.id), trimester: result.trimester, course_code: result.course_code, course_name: result.course_name, description: result.description, resource_count: 0 };
 }
 
 export async function updateCourse(id: string, data: {

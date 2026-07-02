@@ -11,9 +11,9 @@ export function AdminDashboard() {
   const resourceCount = courses?.reduce((s, c) => s + (c.resource_count ?? 0), 0) ?? 0;
 
   const stats = [
-    { label: "Courses", value: courses?.length ?? 0, icon: GraduationCap, href: "/admin/courses", color: "text-emerald-600 bg-emerald-100" },
-    { label: "Resources", value: resourceCount, icon: FolderOpen, href: "/admin/resources", color: "text-amber-600 bg-amber-100" },
-    { label: "Pending Contributions", value: contributions?.length ?? 0, icon: UserCheck, href: "/admin/contributions", color: "text-blue-600 bg-blue-100" },
+    { label: "Courses", value: courses?.length ?? 0, icon: GraduationCap, href: "/nimda/courses", color: "text-emerald-600 bg-emerald-100" },
+    { label: "Resources", value: resourceCount, icon: FolderOpen, href: "/nimda/resources", color: "text-amber-600 bg-amber-100" },
+    { label: "Pending Contributions", value: contributions?.length ?? 0, icon: UserCheck, href: "/nimda/contributions", color: "text-blue-600 bg-blue-100" },
   ];
 
   return (
@@ -35,9 +35,9 @@ export function AdminDashboard() {
         <h2 className="font-semibold text-[#1F2937] mb-2">Quick Actions</h2>
         <div className="flex flex-wrap gap-2 mt-3">
           {[
-            { label: "Manage Courses", href: "/admin/courses" },
-            { label: "Manage Resources", href: "/admin/resources" },
-            { label: "Review Contributions", href: "/admin/contributions" },
+            { label: "Manage Courses", href: "/nimda/courses" },
+            { label: "Manage Resources", href: "/nimda/resources" },
+            { label: "Review Contributions", href: "/nimda/contributions" },
           ].map((action) => (
             <Link key={action.href} to={action.href} className="px-4 py-2 rounded-xl bg-[#4F7CFF]/10 text-[#4F7CFF] text-sm font-medium hover:bg-[#4F7CFF]/20 transition-all duration-150">
               {action.label}

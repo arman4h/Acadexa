@@ -40,7 +40,7 @@ export default function App() {
             <Route path="contribute" element={<Contribute />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="admin" element={<AdminLayout />}>
+          <Route path="nimda" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="courses" element={<AdminCourses />} />
             <Route path="resources" element={<AdminResources />} />

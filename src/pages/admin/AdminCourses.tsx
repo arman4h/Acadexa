@@ -1,105 +1,184 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, X, AlertCircle } from "lucide-react";
 import { getAllCourses, createCourse, updateCourse, deleteCourse } from "../../services/courseService";
 import { Button } from "../../components/ui/Button";
-import { Input } from "../../components/ui/Input";
 import { EmptyState } from "../../components/ui/EmptyState";
 import type { Course } from "../../types";
 
 export function AdminCourses() {
   const queryClient = useQueryClient();
-  const { data: courses } = useQuery({ queryKey: ["courses", "all"], queryFn: getAllCourses });
-
-  const [editing, setEditing] = useState<Course | null>(null);
-  const [showForm, setShowForm] = useState(false);
+  const { data: courses, error: fetchError } = useQuery({ queryKey: ["courses"], queryFn: getAllCourses });
+  const [search, setSearch] = useState("");
+  const [modal, setModal] = useState<{ open: boolean; editing: Course | null }>({ open: false, editing: null });
   const [trimester, setTrimester] = useState("");
   const [courseCode, setCourseCode] = useState("");
   const [courseName, setCourseName] = useState("");
   const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
+
+  const refetch = () => queryClient.invalidateQueries({ queryKey: ["courses"] });
 
   const createMut = useMutation({
-    mutationFn: () => createCourse({ trimester: parseInt(trimester), course_code: courseCode, course_name: courseName, description: description || undefined }),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["courses"] }); resetForm(); },
+    mutationFn: () => createCourse({ trimester: parseInt(trimester), course_code: courseCode.trim(), course_name: courseName.trim(), description: description.trim() || undefined }),
+    onSuccess: () => { refetch(); closeModal(); },
+    onError: (e) => setError(e instanceof Error ? e.message : "Failed to create course"),
   });
 
   const updateMut = useMutation({
-    mutationFn: () => updateCourse(editing!.id, { trimester: parseInt(trimester), course_code: courseCode, course_name: courseName, description: description || undefined }),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["courses"] }); resetForm(); },
+    mutationFn: (data: { id: string; trimester: number; course_code: string; course_name: string; description?: string }) =>
+      updateCourse(data.id, data),
+    onSuccess: () => { refetch(); closeModal(); },
+    onError: (e) => setError(e instanceof Error ? e.message : "Failed to update course"),
   });
 
   const deleteMut = useMutation({
     mutationFn: (id: string) => deleteCourse(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["courses"] }),
+    onSuccess: () => refetch(),
+    onError: (e) => setError(e instanceof Error ? e.message : "Failed to delete course"),
   });
 
-  function resetForm() { setShowForm(false); setEditing(null); setTrimester(""); setCourseCode(""); setCourseName(""); setDescription(""); }
-
-  function startEdit(c: Course) {
-    setEditing(c); setTrimester(String(c.trimester));
-    setCourseCode(c.course_code); setCourseName(c.course_name); setDescription(c.description ?? ""); setShowForm(true);
+  function closeModal() {
+    setModal({ open: false, editing: null });
+    setTrimester(""); setCourseCode(""); setCourseName(""); setDescription(""); setError("");
   }
 
-  function startCreate() {
-    setEditing(null); setTrimester("1");
-    setCourseCode(""); setCourseName(""); setDescription(""); setShowForm(true);
+  function openEdit(c: Course) {
+    setModal({ open: true, editing: c });
+    setTrimester(String(c.trimester));
+    setCourseCode(c.course_code);
+    setCourseName(c.course_name);
+    setDescription(c.description ?? "");
+    setError("");
+  }
+
+  function openCreate() {
+    setModal({ open: true, editing: null });
+    setTrimester("1");
+    setCourseCode(""); setCourseName(""); setDescription("");
+    setError("");
+  }
+
+  function handleSave() {
+    if (!courseCode.trim() || !courseName.trim()) return;
+    if (modal.editing) {
+      updateMut.mutate({
+        id: modal.editing.id,
+        trimester: parseInt(trimester),
+        course_code: courseCode.trim(),
+        course_name: courseName.trim(),
+        description: description.trim() || undefined,
+      });
+    } else {
+      createMut.mutate();
+    }
   }
 
   const trimesterOptions = Array.from({ length: 12 }, (_, i) => i + 1);
+
+  const filtered = (courses ?? []).filter(
+    (c) =>
+      c.course_name.toLowerCase().includes(search.toLowerCase()) ||
+      c.course_code.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const isPending = createMut.isPending || updateMut.isPending;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-[#1F2937]">Courses</h1>
-        <Button onClick={startCreate}><Plus className="w-4 h-4" /> Add Course</Button>
+        <Button onClick={openCreate}><Plus className="w-4 h-4" /> Add Course</Button>
       </div>
 
-      {showForm && (
-        <div className="rounded-2xl border border-[#EAECEF] bg-white p-5 mb-6">
-          <h2 className="font-semibold text-[#1F2937] mb-4">{editing ? "Edit Course" : "New Course"}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Trimester</label>
-              <select value={trimester} onChange={(e) => setTrimester(e.target.value)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10">
-                {trimesterOptions.map((t) => <option key={t} value={String(t)}>Trimester {t}</option>)}
-              </select>
+      <div className="relative max-w-md mb-6">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280]">
+          <Search className="w-4 h-4" />
+        </div>
+        <input
+          type="text"
+          placeholder="Search courses by name or code..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 pl-11 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10"
+        />
+      </div>
+
+      {(error || fetchError) && (
+        <div className="flex items-center gap-2 rounded-xl bg-red-50 text-red-600 px-4 py-3 text-sm mb-4">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          {error || (fetchError instanceof Error ? fetchError.message : "Failed to load courses")}
+        </div>
+      )}
+
+      {/* Modal */}
+      {modal.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-[#1F2937]">{modal.editing ? "Edit Course" : "New Course"}</h2>
+              <button onClick={closeModal} className="p-1.5 rounded-xl text-[#6B7280] hover:text-[#1F2937] hover:bg-[#EAECEF]/50 transition-all duration-150 cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Course Code</label>
-              <Input value={courseCode} onChange={(e) => setCourseCode(e.target.value)} placeholder="e.g. CSE 1110" />
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-[#1F2937] mb-1">Trimester</label>
+                <select value={trimester} onChange={(e) => setTrimester(e.target.value)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10">
+                  {trimesterOptions.map((t) => <option key={t} value={String(t)}>Trimester {t}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#1F2937] mb-1">Course Code</label>
+                <input
+                  value={courseCode}
+                  onChange={(e) => setCourseCode(e.target.value)}
+                  placeholder="e.g. CSE 1110"
+                  className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#1F2937] mb-1">Course Name</label>
+                <input
+                  value={courseName}
+                  onChange={(e) => setCourseName(e.target.value)}
+                  placeholder="e.g. Introduction to Computer Systems"
+                  className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#1F2937] mb-1">Description (optional)</label>
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 resize-none" />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Course Name</label>
-              <Input value={courseName} onChange={(e) => setCourseName(e.target.value)} placeholder="e.g. Introduction to Computer Systems" />
+            <div className="flex justify-end gap-2 mt-6">
+              <Button variant="secondary" onClick={closeModal} disabled={isPending}>Cancel</Button>
+              <Button onClick={handleSave} disabled={isPending || !courseCode.trim() || !courseName.trim()}>
+                {isPending ? "Saving..." : modal.editing ? "Save" : "Create"}
+              </Button>
             </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Description (optional)</label>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 resize-none" />
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <Button onClick={() => (editing ? updateMut : createMut).mutate()} disabled={createMut.isPending || updateMut.isPending || !courseCode || !courseName}>
-              {editing ? "Save" : "Create"}
-            </Button>
-            <Button variant="secondary" onClick={resetForm}>Cancel</Button>
           </div>
         </div>
       )}
 
-      {!courses?.length && <EmptyState title="No courses" description="Add a course to get started." />}
+      {!courses?.length && !search && <EmptyState title="No courses" description="Add a course to get started." />}
+
+      {!filtered.length && search && (
+        <EmptyState title="No matches" description={`No courses matching "${search}".`} />
+      )}
 
       <div className="space-y-2">
-        {courses?.map((c) => (
+        {filtered.map((c) => (
           <div key={c.id} className="rounded-2xl border border-[#EAECEF] bg-white p-4 flex items-center justify-between">
             <div>
               <p className="font-medium text-[#1F2937]">{c.course_name}</p>
               <p className="text-sm text-[#4F7CFF]">{c.course_code} — Trimester {c.trimester}</p>
             </div>
             <div className="flex gap-1">
-              <button onClick={() => startEdit(c)} className="p-2 rounded-xl text-[#6B7280] hover:text-[#4F7CFF] hover:bg-[#EAECEF]/50 transition-all duration-150 cursor-pointer" aria-label="Edit">
+              <button onClick={() => openEdit(c)} className="p-2 rounded-xl text-[#6B7280] hover:text-[#4F7CFF] hover:bg-[#EAECEF]/50 transition-all duration-150 cursor-pointer" aria-label="Edit">
                 <Pencil className="w-4 h-4" />
               </button>
-              <button onClick={() => deleteMut.mutate(c.id)} className="p-2 rounded-xl text-[#6B7280] hover:text-red-500 hover:bg-red-50 transition-all duration-150 cursor-pointer" aria-label="Delete">
+              <button onClick={() => { if (confirm("Delete this course?")) deleteMut.mutate(c.id); }} className="p-2 rounded-xl text-[#6B7280] hover:text-red-500 hover:bg-red-50 transition-all duration-150 cursor-pointer" aria-label="Delete">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>

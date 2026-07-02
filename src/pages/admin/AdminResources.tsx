@@ -54,8 +54,17 @@ export function AdminResources() {
   }
 
   function startCreate() {
-    setEditing(null); setCourseId(selectedCourseId || courses?.[0]?.id || "");
-    setType("website"); setTitle(""); setDescription(""); setUrl(""); setAuthor(""); setContributorName(""); setContributorUrl(""); setShowForm(true);
+    const nextCourseId = selectedCourseId || (courses?.length ? String(courses[0].id) : "");
+    setEditing(null);
+    setCourseId(nextCourseId);
+    setType("website");
+    setTitle("");
+    setDescription("");
+    setUrl("");
+    setAuthor("");
+    setContributorName("");
+    setContributorUrl("");
+    setShowForm(true);
   }
 
   return (
@@ -80,6 +89,7 @@ export function AdminResources() {
             <div>
               <label className="block text-sm font-medium text-[#1F2937] mb-1">Course</label>
               <select value={courseId} onChange={(e) => setCourseId(e.target.value)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10">
+                <option value="">-- Select a Course --</option>
                 {courses?.map((c) => <option key={c.id} value={c.id}>{c.course_code} — {c.course_name}</option>)}
               </select>
             </div>
@@ -115,7 +125,7 @@ export function AdminResources() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => (editing ? updateMut : createMut).mutate()} disabled={createMut.isPending || updateMut.isPending || !title || !url}>
+            <Button onClick={() => (editing ? updateMut : createMut).mutate()} disabled={createMut.isPending || updateMut.isPending || !title || !url || !courseId}>
               {editing ? "Save" : "Create"}
             </Button>
             <Button variant="secondary" onClick={resetForm}>Cancel</Button>

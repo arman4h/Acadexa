@@ -1,68 +1,78 @@
 import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
-import { Input } from "../components/ui/Input";
 import { CourseCard } from "../components/ui/CourseCard";
 import { EmptyState } from "../components/ui/EmptyState";
-import { ErrorState } from "../components/ui/ErrorState";
-import { useSearchCourses } from "../hooks/useCourses";
-import { SectionTitle } from "../components/ui/SectionTitle";
+import { CardSkeleton } from "../components/ui/SkeletonLoader";
+import { useAllCourses } from "../hooks/useCourses";
 import { useDebounce } from "../hooks/useDebounce";
+import { useState, useEffect } from "react";
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("q") ?? "";
-  const debouncedQuery = useDebounce(query, 200);
-  const { data: results, isLoading, error } = useSearchCourses(debouncedQuery);
+  const urlQuery = searchParams.get("q") ?? "";
+  const [input, setInput] = useState(urlQuery);
+  const debouncedInput = useDebounce(input, 200);
+  const { data: allCourses, isLoading } = useAllCourses();
 
-  const handleChange = (value: string) => {
-    setSearchParams(value ? { q: value } : {}, { replace: true });
-  };
+  useEffect(() => {
+    setSearchParams(debouncedInput ? { q: debouncedInput } : {}, { replace: true });
+  }, [debouncedInput, setSearchParams]);
+
+  const filtered = debouncedInput.trim()
+    ? (allCourses ?? []).filter(
+        (c) =>
+          c.course_name.toLowerCase().includes(debouncedInput.toLowerCase()) ||
+          c.course_code.toLowerCase().includes(debouncedInput.toLowerCase())
+      )
+    : allCourses ?? [];
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
-      <SectionTitle subtitle="Search by course code, course name, or faculty.">
-        Search
-      </SectionTitle>
-
-      <div className="max-w-xl mb-8">
-        <Input
-          icon={<Search className="w-4 h-4" />}
-          placeholder="Search courses..."
-          value={query}
-          onChange={(e) => handleChange(e.target.value)}
-          autoFocus
-        />
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-[#1F2937] mb-1">Search Courses</h1>
+        <p className="text-[#6B7280]">Find courses by name or course code.</p>
       </div>
 
-      {query && (
+      <div className="max-w-xl mb-8">
+        <div className="relative">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280]">
+            <Search className="w-5 h-5" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search by course name or code…"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            autoFocus
+            className="w-full rounded-2xl border border-[#EAECEF] bg-white px-5 py-4 pl-12 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 text-lg"
+          />
+        </div>
+      </div>
+
+      {input && (
         <p className="text-sm text-[#6B7280] mb-6">
-          {isLoading
-            ? "Searching..."
-            : `${results?.length ?? 0} result${results?.length !== 1 ? "s" : ""} for "${query}"`}
+          {filtered.length} result{filtered.length !== 1 ? "s" : ""} for "{input}"
         </p>
       )}
 
-      {error && <ErrorState message={error.message} />}
-
-      {results && results.length === 0 && query && (
-        <EmptyState
-          title="No courses found"
-          description={`No results matching "${query}". Try a different search term.`}
-        />
-      )}
-
-      {results && results.length > 0 && (
+      {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {results.map((course) => (
+          <CardSkeleton /><CardSkeleton /><CardSkeleton />
+        </div>
+      ) : filtered.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
-      )}
-
-      {!query && !results && (
+      ) : (
         <EmptyState
-          title="Search for courses"
-          description="Type a course code, name, or faculty name to get started."
+          title={input ? "No courses found" : "No courses available"}
+          description={
+            input
+              ? `No results matching "${input}". Try a different term.`
+              : "Courses will appear here once they are added."
+          }
         />
       )}
     </div>

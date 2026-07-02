@@ -3,6 +3,7 @@ import {
   getCoursesByTrimester,
   getCourseById,
   searchCourses,
+  getAllCourses,
 } from "../services/courseService";
 
 export function useCoursesByTrimester(trimesterNumber: number) {
@@ -18,6 +19,13 @@ export function useCourse(id: string) {
     queryKey: ["course", id],
     queryFn: () => getCourseById(id),
     enabled: !!id,
+  });
+}
+
+export function useAllCourses() {
+  return useQuery({
+    queryKey: ["courses"],
+    queryFn: getAllCourses,
   });
 }
 

@@ -164,6 +164,10 @@ export function getContributions(): Contribution[] {
   return [...contributions];
 }
 
+export function getAllResources(): Resource[] {
+  return Object.values(resourcesByCourse).flat();
+}
+
 export function getCourseName(id: string): string {
   return courses.find((c) => c.id === id)?.course_name ?? id;
 }

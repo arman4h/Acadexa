@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getResourcesByCourse,
   getContributorsByCourse,
+  getAllResources,
   submitContribution,
   getContributions,
   approveContribution,
@@ -14,6 +15,13 @@ export function useResourcesByCourse(courseId: string) {
     queryKey: ["resources", "course", courseId],
     queryFn: () => getResourcesByCourse(courseId),
     enabled: !!courseId,
+  });
+}
+
+export function useAllResources() {
+  return useQuery({
+    queryKey: ["resources"],
+    queryFn: getAllResources,
   });
 }
 

@@ -33,7 +33,7 @@ export function Footer() {
               <Link to="/contribute" className="text-sm text-[#6B7280] hover:text-[#4F7CFF] transition-colors duration-150">
                 Contribute
               </Link>
-              <Link to="/admin" className="text-sm text-[#6B7280] hover:text-[#4F7CFF] transition-colors duration-150">
+              <Link to="/nimda" className="text-sm text-[#6B7280] hover:text-[#4F7CFF] transition-colors duration-150">
                 Admin
               </Link>
               <a

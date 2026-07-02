@@ -6,7 +6,9 @@ export async function getResourcesByCourse(courseId: string): Promise<Resource[]
   if (!isSupabaseConfigured) return mock.getResourcesByCourse(courseId);
 
   const { data, error } = await supabase!
-    .from("resource").select("*").eq("course_id", parseInt(courseId));
+    .from("resource")
+    .select("*")
+    .eq("course_id", parseInt(courseId));
   if (error) throw error;
   return (data ?? []).map((r) => ({ ...r, id: String(r.id), course_id: String(r.course_id) }));
 }
@@ -57,6 +59,16 @@ export async function deleteResource(id: string): Promise<boolean> {
   const { error } = await supabase!.from("resource").delete().eq("id", parseInt(id));
   if (error) throw error;
   return true;
+}
+
+export async function getAllResources(): Promise<Resource[]> {
+  if (!isSupabaseConfigured) return mock.getAllResources();
+
+  const { data, error } = await supabase!
+    .from("resource")
+    .select("*");
+  if (error) throw error;
+  return (data ?? []).map((r) => ({ ...r, id: String(r.id), course_id: String(r.course_id) }));
 }
 
 export async function submitContribution(contribution: Contribution): Promise<void> {

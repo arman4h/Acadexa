@@ -3,13 +3,12 @@ import { ArrowLeft, Search } from "lucide-react";
 import { useState } from "react";
 import { SectionTitle } from "../components/ui/SectionTitle";
 import { CourseCard } from "../components/ui/CourseCard";
-import { Input } from "../components/ui/Input";
 import { CardSkeleton } from "../components/ui/SkeletonLoader";
 import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/ui/EmptyState";
 import { useTrimester } from "../hooks/useTrimesters";
 import { useCoursesByTrimester } from "../hooks/useCourses";
-import type { Course } from "../types";
+import { useDebounce } from "../hooks/useDebounce";
 
 export function TrimesterPage() {
   const { id } = useParams<{ id: string }>();
@@ -17,11 +16,12 @@ export function TrimesterPage() {
   const { data: trimester, isLoading: trimesterLoading } = useTrimester(id!);
   const { data: courses, isLoading: coursesLoading, error, refetch } = useCoursesByTrimester(trimesterNum);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 200);
 
   const filtered = (courses ?? []).filter(
-    (c: Course) =>
-      c.course_name.toLowerCase().includes(search.toLowerCase()) ||
-      c.course_code.toLowerCase().includes(search.toLowerCase())
+    (c) =>
+      c.course_name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+      c.course_code.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
 
   if (trimesterLoading) {
@@ -51,12 +51,18 @@ export function TrimesterPage() {
       </SectionTitle>
 
       <div className="max-w-md mb-8">
-        <Input
-          icon={<Search className="w-4 h-4" />}
-          placeholder="Filter courses..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div className="relative">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280]">
+            <Search className="w-4 h-4" />
+          </div>
+          <input
+            type="text"
+            placeholder="Filter courses by name or code..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 pl-11 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10"
+          />
+        </div>
       </div>
 
       {coursesLoading && (
@@ -76,7 +82,7 @@ export function TrimesterPage() {
 
       {!coursesLoading && filtered.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((course: Course) => (
+          {filtered.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
