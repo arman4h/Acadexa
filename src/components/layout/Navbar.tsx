@@ -17,8 +17,11 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-[#EAECEF] bg-[#FAFBFD]/80 backdrop-blur-md">
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl text-[#1F2937]">
-            Nestora
+          <Link
+            to="/"
+            className="flex items-center gap-2 font-bold text-xl text-[#1F2937]"
+          >
+            Acadexa
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
@@ -48,7 +51,11 @@ export function Navbar() {
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>

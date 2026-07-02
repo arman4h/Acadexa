@@ -7,7 +7,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <Link to="/" className="font-bold text-xl text-[#1F2937]">
-              Nestora
+              Acadexa
             </Link>
             <p className="text-sm text-[#6B7280] mt-2 max-w-sm">
               An open-source educational resource archive helping students find learning materials for every course.
@@ -49,7 +49,7 @@ export function Footer() {
         </div>
         <div className="mt-10 pt-6 border-t border-[#EAECEF] flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-[#6B7280]">
-            &copy; {new Date().getFullYear()} Nestora. Open-source under MIT License.
+            &copy; {new Date().getFullYear()} Acadexa. Open-source under MIT License.
           </p>
         </div>
       </div>

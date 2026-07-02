@@ -1,14 +1,19 @@
-import { useState } from "react";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { CheckCircle, Loader2, Search } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { SectionTitle } from "../components/ui/SectionTitle";
 import { useSubmitContribution } from "../hooks/useResources";
+import { useAllCourses } from "../hooks/useCourses";
 import { resourceTypes } from "../utils/resourceHelpers";
 import type { ResourceType } from "../types";
 
 export function Contribute() {
+  const { data: courses = [] } = useAllCourses();
   const [courseId, setCourseId] = useState("");
+  const [courseSearch, setCourseSearch] = useState("");
+  const [showCourseDropdown, setShowCourseDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [resourceType, setResourceType] = useState<ResourceType>("website");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,6 +24,31 @@ export function Contribute() {
   const [success, setSuccess] = useState(false);
 
   const mutation = useSubmitContribution();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowCourseDropdown(false);
+      }
+    }
+
+    if (showCourseDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showCourseDropdown]);
+
+  const selectedCourse = courses.find((c) => String(c.id) === courseId);
+  const filteredCourses = courseSearch
+    ? courses.filter(
+        (c) =>
+          c.course_name.toLowerCase().includes(courseSearch.toLowerCase()) ||
+          c.course_code.toLowerCase().includes(courseSearch.toLowerCase())
+      )
+    : courses;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,9 +64,18 @@ export function Contribute() {
         contributor_url: contributorUrl || undefined,
       });
       setSuccess(true);
-      setCourseId(""); setResourceType("website"); setTitle("");
-      setDescription(""); setUrl(""); setAuthor(""); setContributorName(""); setContributorUrl("");
-    } catch { /* handled by mutation state */ }
+      setCourseId("");
+      setCourseSearch("");
+      setResourceType("website");
+      setTitle("");
+      setDescription("");
+      setUrl("");
+      setAuthor("");
+      setContributorName("");
+      setContributorUrl("");
+    } catch {
+      /* handled by mutation state */
+    }
   };
 
   if (success) {
@@ -47,7 +86,7 @@ export function Contribute() {
         </div>
         <h2 className="text-2xl font-bold text-[#1F2937]">Thank you!</h2>
         <p className="text-[#6B7280] mt-2">
-          Your resource has been submitted and will be reviewed by the team before being published.
+          Your resource has been submitted and will be reviewed by the admin team before being published.
         </p>
         <Button variant="secondary" className="mt-6" onClick={() => setSuccess(false)}>
           Submit another
@@ -58,14 +97,68 @@ export function Contribute() {
 
   return (
     <div className="mx-auto max-w-xl px-6 py-12">
-      <SectionTitle subtitle="Help fellow students by sharing useful resources. Submissions are reviewed before publishing.">
+      <SectionTitle subtitle="Help fellow students by sharing useful resources. Submissions are reviewed by the admin team before publishing.">
         Contribute
       </SectionTitle>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label className="block text-sm font-medium text-[#1F2937] mb-1.5">Course ID</label>
-          <Input placeholder="Enter the course ID" value={courseId} onChange={(e) => setCourseId(e.target.value)} required />
+        <div ref={dropdownRef}>
+          <label className="block text-sm font-medium text-[#1F2937] mb-1.5">
+            Select Course <span className="text-red-500">*</span>
+          </label>
+          <div className="relative">
+            <div
+              className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 cursor-pointer flex items-center justify-between"
+              onClick={() => setShowCourseDropdown(!showCourseDropdown)}
+            >
+              <span className={selectedCourse ? "text-[#1F2937]" : "text-[#6B7280]"}>
+                {selectedCourse ? `${selectedCourse.course_code} — ${selectedCourse.course_name}` : "Select a course..."}
+              </span>
+            </div>
+
+            {showCourseDropdown && (
+              <div className="absolute top-full left-0 right-0 mt-1 rounded-xl border border-[#EAECEF] bg-white shadow-lg z-10 max-h-64 overflow-hidden flex flex-col">
+                <div className="p-3 border-b border-[#EAECEF] sticky top-0 bg-white">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#6B7280]" />
+                    <input
+                      type="text"
+                      placeholder="Search courses..."
+                      value={courseSearch}
+                      onChange={(e) => setCourseSearch(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2 rounded-lg border border-[#EAECEF] outline-none focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 text-sm"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                </div>
+                <div className="overflow-y-auto">
+                  {filteredCourses.length > 0 ? (
+                    filteredCourses.map((course) => (
+                      <div
+                        key={course.id}
+                        onClick={() => {
+                          setCourseId(String(course.id));
+                          setShowCourseDropdown(false);
+                          setCourseSearch("");
+                        }}
+                        className={`px-4 py-3 cursor-pointer transition-colors duration-150 ${
+                          String(course.id) === courseId
+                            ? "bg-[#4F7CFF]/10 text-[#4F7CFF]"
+                            : "text-[#1F2937] hover:bg-[#EAECEF]/50"
+                        }`}
+                      >
+                        <p className="font-medium text-sm">{course.course_code}</p>
+                        <p className="text-xs text-[#6B7280]">{course.course_name}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-4 py-8 text-center text-[#6B7280] text-sm">No courses found</div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-[#6B7280] mt-1">Search by course code or name</p>
         </div>
 
         <div>
@@ -113,11 +206,11 @@ export function Contribute() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={mutation.isPending}>
+        <Button type="submit" className="w-full" disabled={mutation.isPending || !courseId}>
           {mutation.isPending ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</>
           ) : (
-            "Submit for Review"
+            "Submit for Admin Review"
           )}
         </Button>
 

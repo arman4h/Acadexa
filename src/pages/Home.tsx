@@ -133,7 +133,7 @@ export function Home() {
             </div>
             <h2 className="text-3xl font-bold text-[#1F2937]">Built by students, for students</h2>
             <p className="mt-2 text-[#6B7280] max-w-2xl mx-auto">
-              Nestora is an open-source project. Anyone can contribute resources and help fellow students succeed.
+              Acadexa is an open-source project. Anyone can contribute resources and help fellow students succeed.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

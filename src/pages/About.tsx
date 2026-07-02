@@ -6,13 +6,13 @@ export function About() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <SectionTitle subtitle="An open-source educational resource archive for university students.">
-        About Nestora
+        About Acadexa
       </SectionTitle>
 
       <div className="space-y-6 text-[#6B7280] leading-relaxed">
         <p>
-          Nestora helps university students easily find learning materials for every course.
-          Instead of digging through large Google Sheets or scattered links, Nestora organizes
+          Acadexa helps university students easily find learning materials for every course.
+          Instead of digging through large Google Sheets or scattered links, Acadexa organizes
           everything in one clean, searchable place.
         </p>
         <p>
@@ -20,7 +20,7 @@ export function About() {
           question banks, GitHub repositories, notes, books, PDFs, and external websites.
         </p>
         <p>
-          Nestora is open-source and community-driven. Anyone can contribute by submitting
+          Acadexa is open-source and community-driven. Anyone can contribute by submitting
           resources through the contribute form.
         </p>
       </div>
@@ -32,7 +32,7 @@ export function About() {
           </div>
           <h3 className="font-semibold text-[#1F2937]">Open Source</h3>
           <p className="text-sm text-[#6B7280] mt-1">
-            Nestora is open-source under the MIT License. Contribute on GitHub.
+            Acadexa is open-source under the MIT License. Contribute on GitHub.
           </p>
           <Button
             variant="secondary"
