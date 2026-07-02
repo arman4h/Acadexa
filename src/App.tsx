@@ -14,6 +14,8 @@ import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { AdminCourses } from "./pages/admin/AdminCourses";
 import { AdminResources } from "./pages/admin/AdminResources";
 import { AdminContributions } from "./pages/admin/AdminContributions";
+import { AdminAdmins } from "./pages/admin/AdminAdmins";
+import { AdminActivityLog } from "./pages/admin/AdminActivityLog";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +47,9 @@ export default function App() {
             <Route path="courses" element={<AdminCourses />} />
             <Route path="resources" element={<AdminResources />} />
             <Route path="contributions" element={<AdminContributions />} />
+            <Route path="admins" element={<AdminAdmins />} />
+            <Route path="activity-log" element={<AdminActivityLog />} />
+            <Route path="*" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>

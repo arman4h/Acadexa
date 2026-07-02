@@ -87,12 +87,12 @@ export function AdminCourses() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#1F2937]">Courses</h1>
+        <h1 className="text-2xl font-bold text-[#1F2937] dark:text-slate-100">Courses</h1>
         <Button onClick={openCreate}><Plus className="w-4 h-4" /> Add Course</Button>
       </div>
 
       <div className="relative max-w-md mb-6">
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280]">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280] dark:text-slate-400">
           <Search className="w-4 h-4" />
         </div>
         <input
@@ -100,12 +100,12 @@ export function AdminCourses() {
           placeholder="Search courses by name or code..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 pl-11 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10"
+          className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 pl-11 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder-slate-500"
         />
       </div>
 
       {(error || fetchError) && (
-        <div className="flex items-center gap-2 rounded-xl bg-red-50 text-red-600 px-4 py-3 text-sm mb-4">
+        <div className="flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 px-4 py-3 text-sm mb-4">
           <AlertCircle className="w-4 h-4 shrink-0" />
           {error || (fetchError instanceof Error ? fetchError.message : "Failed to load courses")}
         </div>
@@ -114,41 +114,41 @@ export function AdminCourses() {
       {/* Modal */}
       {modal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+          <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-xl border border-[#EAECEF] dark:border-slate-800">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-[#1F2937]">{modal.editing ? "Edit Course" : "New Course"}</h2>
-              <button onClick={closeModal} className="p-1.5 rounded-xl text-[#6B7280] hover:text-[#1F2937] hover:bg-[#EAECEF]/50 transition-all duration-150 cursor-pointer">
+              <h2 className="text-lg font-semibold text-[#1F2937] dark:text-slate-100">{modal.editing ? "Edit Course" : "New Course"}</h2>
+              <button onClick={closeModal} className="p-1.5 rounded-xl text-[#6B7280] dark:text-slate-400 hover:text-[#1F2937] dark:hover:text-slate-200 hover:bg-[#EAECEF]/50 dark:hover:bg-slate-800 transition-all duration-150 cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-[#1F2937] mb-1">Trimester</label>
-                <select value={trimester} onChange={(e) => setTrimester(e.target.value)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10">
+                <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Trimester</label>
+                <select value={trimester} onChange={(e) => setTrimester(e.target.value)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100">
                   {trimesterOptions.map((t) => <option key={t} value={String(t)}>Trimester {t}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1F2937] mb-1">Course Code</label>
+                <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Course Code</label>
                 <input
                   value={courseCode}
                   onChange={(e) => setCourseCode(e.target.value)}
                   placeholder="e.g. CSE 1110"
-                  className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10"
+                  className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder-slate-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1F2937] mb-1">Course Name</label>
+                <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Course Name</label>
                 <input
                   value={courseName}
                   onChange={(e) => setCourseName(e.target.value)}
                   placeholder="e.g. Introduction to Computer Systems"
-                  className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10"
+                  className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder-slate-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1F2937] mb-1">Description (optional)</label>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 resize-none" />
+                <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Description (optional)</label>
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 resize-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" />
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-6">
@@ -169,16 +169,16 @@ export function AdminCourses() {
 
       <div className="space-y-2">
         {filtered.map((c) => (
-          <div key={c.id} className="rounded-2xl border border-[#EAECEF] bg-white p-4 flex items-center justify-between">
+          <div key={c.id} className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-4 flex items-center justify-between">
             <div>
-              <p className="font-medium text-[#1F2937]">{c.course_name}</p>
+              <p className="font-medium text-[#1F2937] dark:text-slate-100">{c.course_name}</p>
               <p className="text-sm text-[#4F7CFF]">{c.course_code} — Trimester {c.trimester}</p>
             </div>
             <div className="flex gap-1">
-              <button onClick={() => openEdit(c)} className="p-2 rounded-xl text-[#6B7280] hover:text-[#4F7CFF] hover:bg-[#EAECEF]/50 transition-all duration-150 cursor-pointer" aria-label="Edit">
+              <button onClick={() => openEdit(c)} className="p-2 rounded-xl text-[#6B7280] dark:text-slate-400 hover:text-[#4F7CFF] hover:bg-[#EAECEF]/50 dark:hover:bg-slate-800 transition-all duration-150 cursor-pointer" aria-label="Edit">
                 <Pencil className="w-4 h-4" />
               </button>
-              <button onClick={() => { if (confirm("Delete this course?")) deleteMut.mutate(c.id); }} className="p-2 rounded-xl text-[#6B7280] hover:text-red-500 hover:bg-red-50 transition-all duration-150 cursor-pointer" aria-label="Delete">
+              <button onClick={() => { if (confirm("Delete this course?")) deleteMut.mutate(c.id); }} className="p-2 rounded-xl text-[#6B7280] dark:text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition-all duration-150 cursor-pointer" aria-label="Delete">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>

@@ -81,11 +81,11 @@ export function Contribute() {
   if (success) {
     return (
       <div className="mx-auto max-w-xl px-6 py-12 text-center">
-        <div className="rounded-2xl bg-green-50 p-4 w-fit mx-auto mb-4">
+        <div className="rounded-2xl bg-green-50 dark:bg-green-950 p-4 w-fit mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
-        <h2 className="text-2xl font-bold text-[#1F2937]">Thank you!</h2>
-        <p className="text-[#6B7280] mt-2">
+        <h2 className="text-2xl font-bold text-[#1F2937] dark:text-slate-100">Thank you!</h2>
+        <p className="text-[#6B7280] dark:text-slate-400 mt-2">
           Your resource has been submitted and will be reviewed by the admin team before being published.
         </p>
         <Button variant="secondary" className="mt-6" onClick={() => setSuccess(false)}>
@@ -103,30 +103,30 @@ export function Contribute() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div ref={dropdownRef}>
-          <label className="block text-sm font-medium text-[#1F2937] mb-1.5">
+          <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">
             Select Course <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <div
-              className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 cursor-pointer flex items-center justify-between"
+              className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 cursor-pointer flex items-center justify-between dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
               onClick={() => setShowCourseDropdown(!showCourseDropdown)}
             >
-              <span className={selectedCourse ? "text-[#1F2937]" : "text-[#6B7280]"}>
+              <span className={selectedCourse ? "text-[#1F2937] dark:text-slate-100" : "text-[#6B7280] dark:text-slate-500"}>
                 {selectedCourse ? `${selectedCourse.course_code} — ${selectedCourse.course_name}` : "Select a course..."}
               </span>
             </div>
 
             {showCourseDropdown && (
-              <div className="absolute top-full left-0 right-0 mt-1 rounded-xl border border-[#EAECEF] bg-white shadow-lg z-10 max-h-64 overflow-hidden flex flex-col">
-                <div className="p-3 border-b border-[#EAECEF] sticky top-0 bg-white">
+              <div className="absolute top-full left-0 right-0 mt-1 rounded-xl border border-[#EAECEF] dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg z-10 max-h-64 overflow-hidden flex flex-col">
+                <div className="p-3 border-b border-[#EAECEF] dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-900">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#6B7280]" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#6B7280] dark:text-slate-400" />
                     <input
                       type="text"
                       placeholder="Search courses..."
                       value={courseSearch}
                       onChange={(e) => setCourseSearch(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 rounded-lg border border-[#EAECEF] outline-none focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 text-sm"
+                      className="w-full pl-9 pr-4 py-2 rounded-lg border border-[#EAECEF] dark:border-slate-700 outline-none focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 text-sm bg-white dark:bg-slate-950 text-[#1F2937] dark:text-slate-100"
                       onClick={(e) => e.stopPropagation()}
                     />
                   </div>
@@ -144,64 +144,64 @@ export function Contribute() {
                         className={`px-4 py-3 cursor-pointer transition-colors duration-150 ${
                           String(course.id) === courseId
                             ? "bg-[#4F7CFF]/10 text-[#4F7CFF]"
-                            : "text-[#1F2937] hover:bg-[#EAECEF]/50"
+                            : "text-[#1F2937] dark:text-slate-100 hover:bg-[#EAECEF]/50 dark:hover:bg-slate-800"
                         }`}
                       >
                         <p className="font-medium text-sm">{course.course_code}</p>
-                        <p className="text-xs text-[#6B7280]">{course.course_name}</p>
+                        <p className="text-xs text-[#6B7280] dark:text-slate-400">{course.course_name}</p>
                       </div>
                     ))
                   ) : (
-                    <div className="px-4 py-8 text-center text-[#6B7280] text-sm">No courses found</div>
+                    <div className="px-4 py-8 text-center text-[#6B7280] dark:text-slate-400 text-sm">No courses found</div>
                   )}
                 </div>
               </div>
             )}
           </div>
-          <p className="text-xs text-[#6B7280] mt-1">Search by course code or name</p>
+          <p className="text-xs text-[#6B7280] dark:text-slate-400 mt-1">Search by course code or name</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#1F2937] mb-1.5">Resource Type</label>
-          <select value={resourceType} onChange={(e) => setResourceType(e.target.value as ResourceType)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10">
+          <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">Resource Type</label>
+          <select value={resourceType} onChange={(e) => setResourceType(e.target.value as ResourceType)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100">
             {resourceTypes.map((rt) => <option key={rt.value} value={rt.value}>{rt.label}</option>)}
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#1F2937] mb-1.5">Title</label>
+          <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">Title</label>
           <Input placeholder="e.g. Introduction to Algorithms - MIT OCW" value={title} onChange={(e) => setTitle(e.target.value)} required />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#1F2937] mb-1.5">Description (optional)</label>
-          <textarea placeholder="Briefly describe what this resource covers..." value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 resize-none" />
+          <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">Description (optional)</label>
+          <textarea placeholder="Briefly describe what this resource covers..." value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 resize-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder-slate-500" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#1F2937] mb-1.5">URL</label>
+          <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">URL</label>
           <Input type="url" placeholder="https://..." value={url} onChange={(e) => setUrl(e.target.value)} required />
         </div>
 
-        <div className="border-t border-[#EAECEF] pt-5">
-          <p className="text-sm font-medium text-[#1F2937] mb-3">Credits</p>
+        <div className="border-t border-[#EAECEF] dark:border-slate-800 pt-5">
+          <p className="text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-3">Credits</p>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1.5">Author (optional)</label>
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">Author (optional)</label>
               <Input placeholder="Teacher or content creator name" value={author} onChange={(e) => setAuthor(e.target.value)} />
-              <p className="text-xs text-[#6B7280] mt-1">For playlists: teacher name. For notes: writer name. For books: author name.</p>
+              <p className="text-xs text-[#6B7280] dark:text-slate-400 mt-1">For playlists: teacher name. For notes: writer name. For books: author name.</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1.5">Your Name (optional)</label>
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">Your Name (optional)</label>
               <Input placeholder="e.g. Rahim Uddin" value={contributorName} onChange={(e) => setContributorName(e.target.value)} />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1.5">Your Contact URL (optional)</label>
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">Your Contact URL (optional)</label>
               <Input placeholder="Facebook, LinkedIn, or any contact link" value={contributorUrl} onChange={(e) => setContributorUrl(e.target.value)} />
-              <p className="text-xs text-[#6B7280] mt-1">Your name will appear in the contributors list with this link.</p>
+              <p className="text-xs text-[#6B7280] dark:text-slate-400 mt-1">Your name will appear in the contributors list with this link.</p>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ export function About() {
         About Acadexa
       </SectionTitle>
 
-      <div className="space-y-6 text-[#6B7280] leading-relaxed">
+      <div className="space-y-6 text-[#6B7280] dark:text-slate-400 leading-relaxed">
         <p>
           Acadexa helps university students easily find learning materials for every course.
           Instead of digging through large Google Sheets or scattered links, Acadexa organizes
@@ -26,12 +26,12 @@ export function About() {
       </div>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-2xl border border-[#EAECEF] bg-white p-5">
-          <div className="rounded-xl bg-[#EAECEF]/50 p-2.5 w-fit mb-3">
-            <FolderGit className="w-5 h-5 text-[#1F2937]" />
+        <div className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+          <div className="rounded-xl bg-[#EAECEF]/50 dark:bg-slate-800 p-2.5 w-fit mb-3">
+            <FolderGit className="w-5 h-5 text-[#1F2937] dark:text-slate-100" />
           </div>
-          <h3 className="font-semibold text-[#1F2937]">Open Source</h3>
-          <p className="text-sm text-[#6B7280] mt-1">
+          <h3 className="font-semibold text-[#1F2937] dark:text-slate-100">Open Source</h3>
+          <p className="text-sm text-[#6B7280] dark:text-slate-400 mt-1">
             Acadexa is open-source under the MIT License. Contribute on GitHub.
           </p>
           <Button
@@ -44,12 +44,12 @@ export function About() {
             GitHub Repository
           </Button>
         </div>
-        <div className="rounded-2xl border border-[#EAECEF] bg-white p-5">
-          <div className="rounded-xl bg-[#EAECEF]/50 p-2.5 w-fit mb-3">
-            <Heart className="w-5 h-5 text-[#1F2937]" />
+        <div className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+          <div className="rounded-xl bg-[#EAECEF]/50 dark:bg-slate-800 p-2.5 w-fit mb-3">
+            <Heart className="w-5 h-5 text-[#1F2937] dark:text-slate-100" />
           </div>
-          <h3 className="font-semibold text-[#1F2937]">Community Driven</h3>
-          <p className="text-sm text-[#6B7280] mt-1">
+          <h3 className="font-semibold text-[#1F2937] dark:text-slate-100">Community Driven</h3>
+          <p className="text-sm text-[#6B7280] dark:text-slate-400 mt-1">
             Resources are submitted by students, for students.
           </p>
           <Button

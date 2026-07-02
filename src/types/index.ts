@@ -49,3 +49,27 @@ export interface Contribution {
   contributor_url?: string;
   created_at?: string;
 }
+
+export type AdminRole = "super_admin" | "admin";
+
+export interface AdminUser {
+  id: string;
+  username: string;
+  full_name?: string;
+  role: AdminRole;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ActivityLog {
+  id: string;
+  actor_id?: string;
+  actor_username: string;
+  actor_role: AdminRole;
+  action: string;
+  entity_type?: string;
+  entity_id?: string;
+  details?: Record<string, unknown> | null;
+  created_at?: string;
+}

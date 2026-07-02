@@ -11,28 +11,28 @@ export function AdminDashboard() {
   const resourceCount = courses?.reduce((s, c) => s + (c.resource_count ?? 0), 0) ?? 0;
 
   const stats = [
-    { label: "Courses", value: courses?.length ?? 0, icon: GraduationCap, href: "/nimda/courses", color: "text-emerald-600 bg-emerald-100" },
-    { label: "Resources", value: resourceCount, icon: FolderOpen, href: "/nimda/resources", color: "text-amber-600 bg-amber-100" },
-    { label: "Pending Contributions", value: contributions?.length ?? 0, icon: UserCheck, href: "/nimda/contributions", color: "text-blue-600 bg-blue-100" },
+    { label: "Courses", value: courses?.length ?? 0, icon: GraduationCap, href: "/nimda/courses", color: "text-emerald-600 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-950" },
+    { label: "Resources", value: resourceCount, icon: FolderOpen, href: "/nimda/resources", color: "text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-950" },
+    { label: "Pending Contributions", value: contributions?.length ?? 0, icon: UserCheck, href: "/nimda/contributions", color: "text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-950" },
   ];
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#1F2937] mb-8">Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold text-[#1F2937] dark:text-slate-100 mb-8">Admin Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         {stats.map((stat) => (
-          <Link key={stat.label} to={stat.href} className="rounded-2xl border border-[#EAECEF] bg-white p-5 transition-all duration-150 hover:shadow-md">
+          <Link key={stat.label} to={stat.href} className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-5 transition-all duration-150 hover:shadow-md">
             <div className={`rounded-xl p-2.5 w-fit mb-3 ${stat.color}`}>
               <stat.icon className="w-5 h-5" />
             </div>
-            <p className="text-2xl font-bold text-[#1F2937]">{stat.value}</p>
-            <p className="text-sm text-[#6B7280] mt-0.5">{stat.label}</p>
+            <p className="text-2xl font-bold text-[#1F2937] dark:text-slate-100">{stat.value}</p>
+            <p className="text-sm text-[#6B7280] dark:text-slate-400 mt-0.5">{stat.label}</p>
           </Link>
         ))}
       </div>
 
-      <div className="rounded-2xl border border-[#EAECEF] bg-white p-5">
-        <h2 className="font-semibold text-[#1F2937] mb-2">Quick Actions</h2>
+      <div className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+        <h2 className="font-semibold text-[#1F2937] dark:text-slate-100 mb-2">Quick Actions</h2>
         <div className="flex flex-wrap gap-2 mt-3">
           {[
             { label: "Manage Courses", href: "/nimda/courses" },

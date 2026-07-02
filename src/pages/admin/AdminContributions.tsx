@@ -18,8 +18,8 @@ export function AdminContributions() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#1F2937] mb-2">Contributions</h1>
-      <p className="text-sm text-[#6B7280] mb-6">Review user-submitted resources. Approving creates a resource and removes the contribution.</p>
+      <h1 className="text-2xl font-bold text-[#1F2937] dark:text-slate-100 mb-2">Contributions</h1>
+      <p className="text-sm text-[#6B7280] dark:text-slate-400 mb-6">Review user-submitted resources. Approving creates a resource and removes the contribution.</p>
 
       {!isLoading && (!contributions || contributions.length === 0) && (
         <EmptyState title="No pending contributions" description="User-submitted resources will appear here for review." />
@@ -29,15 +29,15 @@ export function AdminContributions() {
         {contributions?.map((c) => {
           const Icon = getResourceIcon(c.type);
           return (
-            <div key={c.id} className="rounded-2xl border border-[#EAECEF] bg-white p-5">
+            <div key={c.id} className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3 min-w-0">
                   <div className="rounded-xl bg-[#4F7CFF]/10 p-2.5 shrink-0">
                     <Icon className="w-4 h-4 text-[#4F7CFF]" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-medium text-[#1F2937] truncate">{c.title}</p>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#6B7280] mt-0.5">
+                    <p className="font-medium text-[#1F2937] dark:text-slate-100 truncate">{c.title}</p>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#6B7280] dark:text-slate-400 mt-0.5">
                       <span>{getResourceTypeLabel(c.type)}</span>
                       <span>→ {getCourseName(c.course_id)}</span>
                       {c.author && <span>by {c.author}</span>}
@@ -47,10 +47,10 @@ export function AdminContributions() {
                       </a>
                     </div>
                     {c.description && (
-                      <p className="text-sm text-[#6B7280] mt-1.5 line-clamp-2">{c.description}</p>
+                      <p className="text-sm text-[#6B7280] dark:text-slate-400 mt-1.5 line-clamp-2">{c.description}</p>
                     )}
                     {c.created_at && (
-                      <p className="text-xs text-[#9CA3AF] mt-1">{new Date(c.created_at).toLocaleDateString()}</p>
+                      <p className="text-xs text-[#9CA3AF] dark:text-slate-500 mt-1">{new Date(c.created_at).toLocaleDateString()}</p>
                     )}
                   </div>
                 </div>
@@ -63,9 +63,9 @@ export function AdminContributions() {
                     <Check className="w-4 h-4" /> Approve
                   </Button>
                   <button
-                    onClick={() => deleteMut.mutate(c.id!)}
+                    onClick={() => { if (confirm(`Delete contribution "${c.title}"? This action cannot be undone.`)) deleteMut.mutate(c.id!); }}
                     disabled={deleteMut.isPending}
-                    className="p-2 rounded-xl text-[#6B7280] hover:text-red-500 hover:bg-red-50 transition-all duration-150 cursor-pointer"
+                    className="p-2 rounded-xl text-[#6B7280] dark:text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition-all duration-150 cursor-pointer"
                     aria-label="Delete"
                   >
                     <Trash2 className="w-4 h-4" />

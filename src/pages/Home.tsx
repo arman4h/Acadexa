@@ -98,8 +98,8 @@ export function Home() {
       {/* Trimesters Preview */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-[#1F2937]">Trimesters</h2>
-          <p className="mt-1 text-[#6B7280]">Explore resources organized by trimester.</p>
+          <h2 className="text-3xl font-bold text-[#1F2937] dark:text-slate-100">Trimesters</h2>
+          <p className="mt-1 text-[#6B7280] dark:text-slate-400">Explore resources organized by trimester.</p>
         </div>
         {trimestersLoading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -124,24 +124,24 @@ export function Home() {
       </section>
 
       {/* Open Source */}
-      <section className="bg-white border-t border-[#EAECEF]">
+      <section className="bg-white dark:bg-slate-950 border-t border-[#EAECEF] dark:border-slate-800">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#4F7CFF]/10 px-4 py-1.5 text-sm font-medium text-[#4F7CFF] mb-4">
               <GraduationCap className="w-4 h-4" />
               Open Source & Community Driven
             </div>
-            <h2 className="text-3xl font-bold text-[#1F2937]">Built by students, for students</h2>
-            <p className="mt-2 text-[#6B7280] max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-[#1F2937] dark:text-slate-100">Built by students, for students</h2>
+            <p className="mt-2 text-[#6B7280] dark:text-slate-400 max-w-2xl mx-auto">
               Acadexa is an open-source project. Anyone can contribute resources and help fellow students succeed.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="rounded-2xl border border-[#EAECEF] bg-[#FAFBFD] p-8">
+            <div className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-[#FAFBFD] dark:bg-slate-900 p-8">
               <div className="rounded-xl bg-[#4F7CFF]/10 p-3 w-fit mb-4">
                 <GitFork className="w-6 h-6 text-[#4F7CFF]" />
               </div>
-              <h3 className="text-xl font-semibold text-[#1F2937] mb-3">How It Works</h3>
+              <h3 className="text-xl font-semibold text-[#1F2937] dark:text-slate-100 mb-3">How It Works</h3>
               <ul className="space-y-4">
                 {[
                   { step: "1", title: "Browse Trimesters", desc: "Find your trimester and course." },
@@ -153,18 +153,18 @@ export function Home() {
                       {item.step}
                     </span>
                     <div>
-                      <p className="font-medium text-[#1F2937]">{item.title}</p>
-                      <p className="text-sm text-[#6B7280]">{item.desc}</p>
+                      <p className="font-medium text-[#1F2937] dark:text-slate-100">{item.title}</p>
+                      <p className="text-sm text-[#6B7280] dark:text-slate-400">{item.desc}</p>
                     </div>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl border border-[#EAECEF] bg-[#FAFBFD] p-8">
+            <div className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-[#FAFBFD] dark:bg-slate-900 p-8">
               <div className="rounded-xl bg-[#4F7CFF]/10 p-3 w-fit mb-4">
                 <Heart className="w-6 h-6 text-[#4F7CFF]" />
               </div>
-              <h3 className="text-xl font-semibold text-[#1F2937] mb-3">How to Contribute</h3>
+              <h3 className="text-xl font-semibold text-[#1F2937] dark:text-slate-100 mb-3">How to Contribute</h3>
               <ul className="space-y-4 mb-6">
                 {[
                   { step: "1", title: "Submit a Resource", desc: "Fill out the contribution form with a link to your resource." },
@@ -176,8 +176,8 @@ export function Home() {
                       {item.step}
                     </span>
                     <div>
-                      <p className="font-medium text-[#1F2937]">{item.title}</p>
-                      <p className="text-sm text-[#6B7280]">{item.desc}</p>
+                      <p className="font-medium text-[#1F2937] dark:text-slate-100">{item.title}</p>
+                      <p className="text-sm text-[#6B7280] dark:text-slate-400">{item.desc}</p>
                     </div>
                   </li>
                 ))}

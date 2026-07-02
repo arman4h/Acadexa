@@ -29,13 +29,13 @@ export function SearchPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#1F2937] mb-1">Search Courses</h1>
-        <p className="text-[#6B7280]">Find courses by name or course code.</p>
+        <h1 className="text-3xl font-bold text-[#1F2937] dark:text-slate-100 mb-1">Search Courses</h1>
+        <p className="text-[#6B7280] dark:text-slate-400">Find courses by name or course code.</p>
       </div>
 
       <div className="max-w-xl mb-8">
         <div className="relative">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280]">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280] dark:text-slate-400">
             <Search className="w-5 h-5" />
           </div>
           <input
@@ -44,13 +44,13 @@ export function SearchPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             autoFocus
-            className="w-full rounded-2xl border border-[#EAECEF] bg-white px-5 py-4 pl-12 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 text-lg"
+            className="w-full rounded-2xl border border-[#EAECEF] bg-white px-5 py-4 pl-12 text-[#1F2937] placeholder-[#6B7280] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 text-lg dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder-slate-500"
           />
         </div>
       </div>
 
       {input && (
-        <p className="text-sm text-[#6B7280] mb-6">
+        <p className="text-sm text-[#6B7280] dark:text-slate-400 mb-6">
           {filtered.length} result{filtered.length !== 1 ? "s" : ""} for "{input}"
         </p>
       )}

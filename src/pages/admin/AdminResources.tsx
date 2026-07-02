@@ -70,58 +70,58 @@ export function AdminResources() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#1F2937]">Resources</h1>
+        <h1 className="text-2xl font-bold text-[#1F2937] dark:text-slate-100">Resources</h1>
         <Button onClick={startCreate}><Plus className="w-4 h-4" /> Add Resource</Button>
       </div>
 
       <div className="mb-6">
-        <label className="block text-sm font-medium text-[#1F2937] mb-1.5">Filter by Course</label>
-        <select value={selectedCourseId} onChange={(e) => setSelectedCourseId(e.target.value)} className="w-full max-w-md rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10">
+        <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">Filter by Course</label>
+        <select value={selectedCourseId} onChange={(e) => setSelectedCourseId(e.target.value)} className="w-full max-w-md rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100">
           <option value="">Select a course</option>
           {courses?.map((c) => <option key={c.id} value={c.id}>{c.course_code} — {c.course_name}</option>)}
         </select>
       </div>
 
       {showForm && (
-        <div className="rounded-2xl border border-[#EAECEF] bg-white p-5 mb-6">
-          <h2 className="font-semibold text-[#1F2937] mb-4">{editing ? "Edit Resource" : "New Resource"}</h2>
+        <div className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-5 mb-6">
+          <h2 className="font-semibold text-[#1F2937] dark:text-slate-100 mb-4">{editing ? "Edit Resource" : "New Resource"}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Course</label>
-              <select value={courseId} onChange={(e) => setCourseId(e.target.value)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10">
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Course</label>
+              <select value={courseId} onChange={(e) => setCourseId(e.target.value)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100">
                 <option value="">-- Select a Course --</option>
                 {courses?.map((c) => <option key={c.id} value={c.id}>{c.course_code} — {c.course_name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Type</label>
-              <select value={type} onChange={(e) => setType(e.target.value as ResourceType)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10">
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Type</label>
+              <select value={type} onChange={(e) => setType(e.target.value as ResourceType)} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100">
                 {resourceTypes.map((rt) => <option key={rt.value} value={rt.value}>{rt.label}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Title</label>
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Title</label>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Resource title" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">URL</label>
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">URL</label>
               <Input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Author (optional)</label>
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Author (optional)</label>
               <Input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Teacher or writer name" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Contributor Name (optional)</label>
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Contributor Name (optional)</label>
               <Input value={contributorName} onChange={(e) => setContributorName(e.target.value)} placeholder="Who submitted this?" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Contributor URL (optional)</label>
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Contributor URL (optional)</label>
               <Input value={contributorUrl} onChange={(e) => setContributorUrl(e.target.value)} placeholder="Facebook, LinkedIn, etc." />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Description (optional)</label>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 resize-none" />
+              <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1">Description (optional)</label>
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="w-full rounded-xl border border-[#EAECEF] bg-white px-4 py-3 text-[#1F2937] outline-none transition-all duration-150 focus:border-[#4F7CFF] focus:ring-2 focus:ring-[#4F7CFF]/10 resize-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" />
             </div>
           </div>
           <div className="flex gap-2">
@@ -141,14 +141,14 @@ export function AdminResources() {
         {resources?.map((r) => {
           const Icon = getResourceIcon(r.type);
           return (
-            <div key={r.id} className="rounded-2xl border border-[#EAECEF] bg-white p-4 flex items-center justify-between">
+            <div key={r.id} className="rounded-2xl border border-[#EAECEF] dark:border-slate-800 bg-white dark:bg-slate-900 p-4 flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="rounded-xl bg-[#4F7CFF]/10 p-2 shrink-0">
                   <Icon className="w-4 h-4 text-[#4F7CFF]" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium text-[#1F2937] truncate">{r.title}</p>
-                  <div className="flex items-center gap-2 text-sm text-[#6B7280]">
+                  <p className="font-medium text-[#1F2937] dark:text-slate-100 truncate">{r.title}</p>
+                  <div className="flex items-center gap-2 text-sm text-[#6B7280] dark:text-slate-400">
                     <span>{r.type}</span>
                     {r.author && <span>— {r.author}</span>}
                     {r.contributor_name && <span>(by {r.contributor_name})</span>}
@@ -159,10 +159,10 @@ export function AdminResources() {
                 </div>
               </div>
               <div className="flex gap-1 shrink-0">
-                <button onClick={() => startEdit(r)} className="p-2 rounded-xl text-[#6B7280] hover:text-[#4F7CFF] hover:bg-[#EAECEF]/50 transition-all duration-150 cursor-pointer" aria-label="Edit">
+                <button onClick={() => startEdit(r)} className="p-2 rounded-xl text-[#6B7280] dark:text-slate-400 hover:text-[#4F7CFF] hover:bg-[#EAECEF]/50 dark:hover:bg-slate-800 transition-all duration-150 cursor-pointer" aria-label="Edit">
                   <Pencil className="w-4 h-4" />
                 </button>
-                <button onClick={() => deleteMut.mutate(r.id)} className="p-2 rounded-xl text-[#6B7280] hover:text-red-500 hover:bg-red-50 transition-all duration-150 cursor-pointer" aria-label="Delete">
+                <button onClick={() => { if (confirm(`Delete resource "${r.title}"? This action cannot be undone.`)) deleteMut.mutate(r.id); }} className="p-2 rounded-xl text-[#6B7280] dark:text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition-all duration-150 cursor-pointer" aria-label="Delete">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
