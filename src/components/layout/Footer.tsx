@@ -35,7 +35,7 @@ export function Footer() {
                 Contribute
               </Link>
               <a
-                href="https://github.com"
+                href="https://github.com/arman4h/Acadexa"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-[#6B7280] dark:text-slate-400 hover:text-[#4F7CFF] transition-colors duration-150"

@@ -303,7 +303,7 @@ export function Home() {
                   variant="secondary"
                   onClick={() =>
                     window.open(
-                      "https://github.com",
+                      "https://github.com/arman4h/Acadexa",
                       "_blank",
                       "noopener,noreferrer",
                     )

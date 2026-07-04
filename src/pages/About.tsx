@@ -42,7 +42,7 @@ export function About() {
             variant="secondary"
             size="sm"
             className="mt-3"
-            onClick={() => window.open("https://github.com", "_blank")}
+            onClick={() => window.open("https://github.com/arman4h/Acadexa", "_blank")}
           >
             <FolderGit className="w-4 h-4" />
             GitHub Repository
