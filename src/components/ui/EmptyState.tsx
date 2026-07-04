@@ -7,7 +7,7 @@ interface EmptyStateProps {
 
 export function EmptyState({
   title = "No results found",
-  description = "Try adjusting your search or browse by semester.",
+  description = "Try adjusting your search or browse by trimester.",
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">

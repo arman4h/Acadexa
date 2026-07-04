@@ -7,8 +7,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <Link to="/" className="flex items-center gap-2 font-bold text-xl text-[#1F2937] dark:text-slate-100">
-              <img src="/logo.svg" alt="Acadexa" className="h-7 w-7" />
-              Acadexa
+              <img src="/logo.svg" alt="Acadex" className="h-7 w-7" />
+              Acadex
             </Link>
             <p className="text-sm text-[#6B7280] dark:text-slate-400 mt-2 max-w-sm">
               An open-source educational resource archive helping students find learning materials for every course.
@@ -50,7 +50,7 @@ export function Footer() {
         </div>
         <div className="mt-10 pt-6 border-t border-[#EAECEF] dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-[#6B7280] dark:text-slate-400">
-            &copy; {new Date().getFullYear()} Acadexa. Open-source under MIT License.
+            &copy; {new Date().getFullYear()} Acadex. Open-source under MIT License.
           </p>
         </div>
       </div>

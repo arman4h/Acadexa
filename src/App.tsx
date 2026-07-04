@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/next";
 import { Layout } from "./components/layout/Layout";
 import { AdminLayout } from "./components/layout/AdminLayout";
 import { Home } from "./pages/Home";
@@ -53,6 +54,7 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      <Analytics />
     </QueryClientProvider>
   );
 }

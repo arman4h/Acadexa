@@ -22,8 +22,8 @@ export function Navbar() {
             to="/"
             className="flex items-center gap-2 font-bold text-xl text-[#1F2937] dark:text-slate-100"
           >
-            <img src="/logo.svg" alt="Acadexa" className="h-8 w-8" />
-            Acadexa
+            <img src="/logo.svg" alt="Acadex" className="h-8 w-8" />
+            Acadex
           </Link>
 
           <div className="hidden md:flex items-center gap-1">

@@ -41,7 +41,7 @@ function LoginGate() {
     <div className="mx-auto max-w-sm px-6 py-24 text-center">
       <div className="rounded-2xl bg-white border border-[#EAECEF] p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="rounded-xl bg-[#4F7CFF]/10 p-3 w-fit mx-auto mb-4">
-          <img src="/logo.svg" alt="Acadexa" className="w-6 h-6" />
+          <img src="/logo.svg" alt="Acadex" className="w-6 h-6" />
         </div>
         <h1 className="text-xl font-bold text-[#1F2937] mb-1 dark:text-slate-100">Admin Access</h1>
         <p className="text-sm text-[#6B7280] mb-6 dark:text-slate-400">Enter your username and password to continue.</p>
@@ -109,7 +109,7 @@ export function AdminLayout() {
     <div className="mx-auto max-w-6xl px-6 py-12 dark:text-slate-100">
       <div className="flex items-center justify-between mb-6">
         <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-[#6B7280] hover:text-[#4F7CFF] transition-colors duration-150 dark:text-slate-400">
-          <img src="/logo.svg" alt="Acadexa" className="w-5 h-5" />
+          <img src="/logo.svg" alt="Acadex" className="w-5 h-5" />
           Back to site
         </Link>
         <div className="flex items-center gap-2">
