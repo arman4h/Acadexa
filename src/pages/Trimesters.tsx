@@ -2,6 +2,7 @@ import { SectionTitle } from "../components/ui/SectionTitle";
 import { TrimesterCard } from "../components/ui/TrimesterCard";
 import { SkeletonLoader } from "../components/ui/SkeletonLoader";
 import { ErrorState } from "../components/ui/ErrorState";
+import { SEO } from "../components/SEO";
 import { useTrimesters } from "../hooks/useTrimesters";
 
 export function Trimesters() {
@@ -9,6 +10,11 @@ export function Trimesters() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
+      <SEO
+        title="Trimesters"
+        description="Browse all trimesters and find the courses you need at Acadexa."
+        url="/trimesters"
+      />
       <SectionTitle subtitle="Browse all trimesters and find the courses you need.">
         Trimesters
       </SectionTitle>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /nimda
+
+Sitemap: https://acadexa.vercel.app/sitemap.xml

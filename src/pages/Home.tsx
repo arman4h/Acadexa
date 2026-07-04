@@ -7,6 +7,7 @@ import {
 import { TrimesterCard } from "../components/ui/TrimesterCard";
 import { SkeletonLoader } from "../components/ui/SkeletonLoader";
 import { Button } from "../components/ui/Button";
+import { SEO } from "../components/SEO";
 import { useTrimesters } from "../hooks/useTrimesters";
 import { useAllResources } from "../hooks/useResources";
 import { resourceTypes, getResourceIcon } from "../utils/resourceHelpers";
@@ -39,6 +40,9 @@ export function Home() {
 
   return (
     <div>
+      <SEO
+        description="Acadexa is a free, open-source student academic dashboard for UIU CSE. Browse playlists, notes, question banks and study resources for every CSE course."
+      />
       {/* Hero */}
       <section className="hero">
         <span className="eyebrow">

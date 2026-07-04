@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { CourseCard } from "../components/ui/CourseCard";
 import { EmptyState } from "../components/ui/EmptyState";
 import { CardSkeleton } from "../components/ui/SkeletonLoader";
+import { SEO } from "../components/SEO";
 import { useAllCourses } from "../hooks/useCourses";
 import { useDebounce } from "../hooks/useDebounce";
 import { useState, useEffect } from "react";
@@ -28,6 +29,11 @@ export function SearchPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
+      <SEO
+        title="Search Courses"
+        description="Search for CSE courses by name or course code at Acadexa."
+        url="/search"
+      />
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-[#1F2937] dark:text-slate-100 mb-1">Search Courses</h1>
         <p className="text-[#6B7280] dark:text-slate-400">Find courses by name or course code.</p>

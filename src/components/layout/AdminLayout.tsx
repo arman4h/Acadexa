@@ -4,6 +4,7 @@ import { useAdminAuth } from "../../hooks/useAdminAuth";
 import { useState } from "react";
 import { Button } from "../ui/Button";
 import { ThemeToggle } from "../ui/ThemeToggle";
+import { SEO } from "../SEO";
 
 const navItems = [
   { to: "/nimda", label: "Dashboard", icon: LayoutDashboard },
@@ -107,6 +108,7 @@ export function AdminLayout() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12 dark:text-slate-100">
+      <SEO title="Admin" noindex />
       <div className="flex items-center justify-between mb-6">
         <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-[#6B7280] hover:text-[#4F7CFF] transition-colors duration-150 dark:text-slate-400">
           <img src="/logo.svg" alt="Acadex" className="w-5 h-5" />

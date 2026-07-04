@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
 import { Layout } from "./components/layout/Layout";
 import { AdminLayout } from "./components/layout/AdminLayout";
@@ -30,31 +31,33 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="trimesters" element={<Trimesters />} />
-            <Route path="trimester/:id" element={<TrimesterPage />} />
-            <Route path="course/:id" element={<CoursePage />} />
-            <Route path="search" element={<SearchPage />} />
-            <Route path="about" element={<About />} />
-            <Route path="contribute" element={<Contribute />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-          <Route path="nimda" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="courses" element={<AdminCourses />} />
-            <Route path="resources" element={<AdminResources />} />
-            <Route path="contributions" element={<AdminContributions />} />
-            <Route path="admins" element={<AdminAdmins />} />
-            <Route path="activity-log" element={<AdminActivityLog />} />
-            <Route path="*" element={<AdminDashboard />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-      <Analytics />
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="trimesters" element={<Trimesters />} />
+              <Route path="trimester/:id" element={<TrimesterPage />} />
+              <Route path="course/:id" element={<CoursePage />} />
+              <Route path="search" element={<SearchPage />} />
+              <Route path="about" element={<About />} />
+              <Route path="contribute" element={<Contribute />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+            <Route path="nimda" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="courses" element={<AdminCourses />} />
+              <Route path="resources" element={<AdminResources />} />
+              <Route path="contributions" element={<AdminContributions />} />
+              <Route path="admins" element={<AdminAdmins />} />
+              <Route path="activity-log" element={<AdminActivityLog />} />
+              <Route path="*" element={<AdminDashboard />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+        <Analytics />
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 }

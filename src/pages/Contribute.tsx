@@ -3,6 +3,7 @@ import { CheckCircle, Loader2, Search } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { SectionTitle } from "../components/ui/SectionTitle";
+import { SEO } from "../components/SEO";
 import { useSubmitContribution } from "../hooks/useResources";
 import { useAllCourses } from "../hooks/useCourses";
 import { resourceTypes } from "../utils/resourceHelpers";
@@ -97,6 +98,11 @@ export function Contribute() {
 
   return (
     <div className="mx-auto max-w-xl px-6 py-12">
+      <SEO
+        title="Contribute"
+        description="Help fellow students by sharing useful CSE resources. Submit playlists, notes, question banks, and more at Acadexa."
+        url="/contribute"
+      />
       <SectionTitle subtitle="Help fellow students by sharing useful resources. Submissions are reviewed by the admin team before publishing.">
         Contribute
       </SectionTitle>

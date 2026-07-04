@@ -1,10 +1,16 @@
 import { FolderGit, Heart, Award, ExternalLink } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { SectionTitle } from "../components/ui/SectionTitle";
+import { SEO } from "../components/SEO";
 
 export function About() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
+      <SEO
+        title="About"
+        description="Learn about Acadexa - an open-source educational resource archive for university students, built by CSE students for CSE students."
+        url="/about"
+      />
       <SectionTitle subtitle="An open-source educational resource archive for university students.">
         About Acadex
       </SectionTitle>

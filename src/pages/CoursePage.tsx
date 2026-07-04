@@ -8,6 +8,7 @@ import { ResourceCard } from "../components/ui/ResourceCard";
 import { SkeletonLoader } from "../components/ui/SkeletonLoader";
 import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/ui/EmptyState";
+import { SEO } from "../components/SEO";
 import { useCourse } from "../hooks/useCourses";
 import { useResourcesByCourse, useContributorsByCourse } from "../hooks/useResources";
 import { getResourceTypeLabel } from "../utils/resourceHelpers";
@@ -58,6 +59,11 @@ export function CoursePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
+      <SEO
+        title={`${course.course_name} (${course.course_code})`}
+        description={`${course.description || `Resources for ${course.course_name} (${course.course_code})`}. Browse ${resources?.length ?? 0} resources at Acadexa.`}
+        url={`/course/${id}`}
+      />
       <Link
         to={`/trimester/${course.trimester}`}
         className="inline-flex items-center gap-1 text-sm text-[#6B7280] dark:text-slate-400 hover:text-[#4F7CFF] transition-colors duration-150 mb-6"

@@ -6,6 +6,7 @@ import { CourseCard } from "../components/ui/CourseCard";
 import { CardSkeleton } from "../components/ui/SkeletonLoader";
 import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/ui/EmptyState";
+import { SEO } from "../components/SEO";
 import { useTrimester } from "../hooks/useTrimesters";
 import { useCoursesByTrimester } from "../hooks/useCourses";
 import { useDebounce } from "../hooks/useDebounce";
@@ -38,6 +39,11 @@ export function TrimesterPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
+      <SEO
+        title={trimester.name}
+        description={`${trimester.name} courses and resources at Acadexa. Browse ${courses?.length ?? 0} courses.`}
+        url={`/trimester/${id}`}
+      />
       <Link
         to="/trimesters"
         className="inline-flex items-center gap-1 text-sm text-[#6B7280] dark:text-slate-400 hover:text-[#4F7CFF] transition-colors duration-150 mb-6"
