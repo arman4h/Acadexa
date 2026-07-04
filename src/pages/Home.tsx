@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Search, ArrowUpRight,
   GitFork, Heart, Star, GraduationCap,
-  BookOpen, Layers, FileSearch, PlusCircle, FolderOpen, Globe, Award, ExternalLink,
+  BookOpen, Layers, PlusCircle, FolderOpen, Globe, Award, ExternalLink,
 } from "lucide-react";
 import { TrimesterCard } from "../components/ui/TrimesterCard";
 import { SkeletonLoader } from "../components/ui/SkeletonLoader";
