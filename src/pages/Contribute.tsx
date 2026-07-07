@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { CheckCircle, Loader2, Search } from "lucide-react";
+import { CheckCircle, Loader2, Search, Upload, Link as LinkIcon } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { SectionTitle } from "../components/ui/SectionTitle";
 import { SEO } from "../components/SEO";
 import { useSubmitContribution } from "../hooks/useResources";
 import { useAllCourses } from "../hooks/useCourses";
+import { uploadPdf } from "../lib/storage";
 import { resourceTypes } from "../utils/resourceHelpers";
 import type { ResourceType } from "../types";
 
@@ -23,6 +24,13 @@ export function Contribute() {
   const [contributorName, setContributorName] = useState("");
   const [contributorUrl, setContributorUrl] = useState("");
   const [success, setSuccess] = useState(false);
+
+  // PDF upload state
+  const [inputMode, setInputMode] = useState<"link" | "pdf">("link");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const mutation = useSubmitContribution();
 
@@ -53,13 +61,32 @@ export function Contribute() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUploadError(null);
+
+    let finalUrl = url;
+    let finalType = resourceType;
+
+    // Handle PDF upload
+    if (inputMode === "pdf" && selectedFile) {
+      setUploading(true);
+      try {
+        finalUrl = await uploadPdf(selectedFile);
+        finalType = "pdf";
+      } catch (err) {
+        setUploadError(err instanceof Error ? err.message : "Failed to upload PDF. Please try again.");
+        setUploading(false);
+        return;
+      }
+      setUploading(false);
+    }
+
     try {
       await mutation.mutateAsync({
         course_id: courseId,
-        type: resourceType,
+        type: finalType,
         title,
         description: description || undefined,
-        url,
+        url: finalUrl,
         author: author || undefined,
         contributor_name: contributorName || undefined,
         contributor_url: contributorUrl || undefined,
@@ -74,6 +101,8 @@ export function Contribute() {
       setAuthor("");
       setContributorName("");
       setContributorUrl("");
+      setSelectedFile(null);
+      setInputMode("link");
     } catch {
       /* handled by mutation state */
     }
@@ -100,8 +129,9 @@ export function Contribute() {
     <div className="mx-auto max-w-xl px-6 py-12">
       <SEO
         title="Contribute"
-        description="Help fellow students by sharing useful CSE resources. Submit playlists, notes, question banks, and more at Acadexa."
+        description="Help fellow UIU CSE students by sharing useful resources. Submit playlists, notes, question banks, and study materials for United International University courses."
         url="/contribute"
+        keywords="contribute UIU resources, submit CSE resources, UIU CSE contributions, United International University study materials"
       />
       <SectionTitle subtitle="Help fellow students by sharing useful resources. Submissions are reviewed by the admin team before publishing.">
         Contribute
@@ -185,8 +215,95 @@ export function Contribute() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">URL</label>
-          <Input type="url" placeholder="https://..." value={url} onChange={(e) => setUrl(e.target.value)} required />
+          <label className="block text-sm font-medium text-[#1F2937] dark:text-slate-100 mb-1.5">Resource</label>
+
+          {/* Toggle between Link and PDF Upload */}
+          <div className="flex gap-2 mb-3">
+            <button
+              type="button"
+              onClick={() => { setInputMode("link"); setSelectedFile(null); setUploadError(null); }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer ${
+                inputMode === "link"
+                  ? "bg-[#4F7CFF] text-white"
+                  : "bg-[#EAECEF]/60 text-[#6B7280] hover:bg-[#EAECEF] dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"
+              }`}
+            >
+              <LinkIcon className="w-4 h-4" /> Paste Link
+            </button>
+            <button
+              type="button"
+              onClick={() => { setInputMode("pdf"); setUrl(""); setUploadError(null); }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer ${
+                inputMode === "pdf"
+                  ? "bg-[#4F7CFF] text-white"
+                  : "bg-[#EAECEF]/60 text-[#6B7280] hover:bg-[#EAECEF] dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"
+              }`}
+            >
+              <Upload className="w-4 h-4" /> Upload PDF
+            </button>
+          </div>
+
+          {inputMode === "link" ? (
+            <Input type="url" placeholder="https://..." value={url} onChange={(e) => setUrl(e.target.value)} required />
+          ) : (
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,application/pdf"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    if (file.size > 50 * 1024 * 1024) {
+                      setUploadError("File size must be less than 50MB.");
+                      return;
+                    }
+                    setSelectedFile(file);
+                    setUploadError(null);
+                    // Auto-set title from filename if empty
+                    if (!title) {
+                      setTitle(file.name.replace(/\.pdf$/i, ""));
+                    }
+                  }
+                }}
+              />
+              {selectedFile ? (
+                <div className="flex items-center gap-3 rounded-xl border border-[#4F7CFF]/30 bg-[#4F7CFF]/5 px-4 py-3 dark:border-[#4F7CFF]/20 dark:bg-[#4F7CFF]/5">
+                  <div className="rounded-lg bg-[#4F7CFF]/10 p-2">
+                    <Upload className="w-4 h-4 text-[#4F7CFF]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[#1F2937] dark:text-slate-100 truncate">{selectedFile.name}</p>
+                    <p className="text-xs text-[#6B7280] dark:text-slate-400">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+                    className="text-xs text-[#6B7280] dark:text-slate-400 hover:text-red-500 transition-colors cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full rounded-xl border-2 border-dashed border-[#EAECEF] dark:border-slate-700 px-6 py-8 text-center transition-all duration-150 hover:border-[#4F7CFF] hover:bg-[#4F7CFF]/5 cursor-pointer group"
+                >
+                  <Upload className="w-8 h-8 text-[#6B7280] dark:text-slate-400 group-hover:text-[#4F7CFF] mx-auto mb-2 transition-colors" />
+                  <p className="text-sm font-medium text-[#1F2937] dark:text-slate-100">Click to select a PDF</p>
+                  <p className="text-xs text-[#6B7280] dark:text-slate-400 mt-1">Max file size: 50MB</p>
+                </button>
+              )}
+              {uploadError && (
+                <p className="text-sm text-red-500 mt-2">{uploadError}</p>
+              )}
+              <p className="text-xs text-[#6B7280] dark:text-slate-400 mt-1.5">
+                PDF will be uploaded to cloud storage and a shareable link will be generated automatically.
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="border-t border-[#EAECEF] dark:border-slate-800 pt-5">
@@ -212,9 +329,9 @@ export function Contribute() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={mutation.isPending || !courseId}>
-          {mutation.isPending ? (
-            <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</>
+        <Button type="submit" className="w-full" disabled={mutation.isPending || uploading || !courseId || (inputMode === "pdf" && !selectedFile) || (inputMode === "link" && !url)}>
+          {(mutation.isPending || uploading) ? (
+            <><Loader2 className="w-4 h-4 animate-spin" /> {uploading ? "Uploading PDF..." : "Submitting..."}</>
           ) : (
             "Submit for Admin Review"
           )}

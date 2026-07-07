@@ -41,7 +41,27 @@ export function Home() {
   return (
     <div>
       <SEO
-        description="Acadexa is a free, open-source student academic dashboard for UIU CSE. Browse playlists, notes, question banks and study resources for every CSE course."
+        description="Acadexa (UIU Acadex) is a free, open-source educational resource hub for UIU CSE students at United International University. Browse playlists, notes, question banks, and study resources for every CSE course."
+        keywords="UIU, UIU acadex, UIU CSE, United International University, CSE resources, CSE courses, UIU course materials, UIU study resources, Bangladesh university, CSE notes, CSE playlists, question banks UIU, UIU resources, acadex UIU"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Acadexa",
+          "url": "https://acadexa.vercel.app",
+          "description": "Free, open-source educational resource hub for UIU CSE students at United International University.",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "Acadexa"
+          },
+          "keywords": "UIU, UIU CSE, United International University, CSE resources, UIU acadex"
+        }}
       />
       {/* Hero */}
       <section className="hero">

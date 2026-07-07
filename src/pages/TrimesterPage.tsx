@@ -41,8 +41,9 @@ export function TrimesterPage() {
     <div className="mx-auto max-w-6xl px-6 py-12">
       <SEO
         title={trimester.name}
-        description={`${trimester.name} courses and resources at Acadexa. Browse ${courses?.length ?? 0} courses.`}
+        description={`${trimester.name} courses and resources at UIU CSE. Browse ${courses?.length ?? 0} courses with playlists, notes, question banks at United International University.`}
         url={`/trimester/${id}`}
+        keywords={`${trimester.name}, UIU ${trimester.name}, UIU CSE courses, United International University courses`}
       />
       <Link
         to="/trimesters"

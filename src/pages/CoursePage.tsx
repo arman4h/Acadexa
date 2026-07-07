@@ -61,8 +61,9 @@ export function CoursePage() {
     <div className="mx-auto max-w-6xl px-6 py-12">
       <SEO
         title={`${course.course_name} (${course.course_code})`}
-        description={`${course.description || `Resources for ${course.course_name} (${course.course_code})`}. Browse ${resources?.length ?? 0} resources at Acadexa.`}
+        description={`${course.description || `${course.course_name} (${course.course_code}) resources`}. Find playlists, notes, question banks, and study materials for ${course.course_code} at UIU CSE, United International University.`}
         url={`/course/${id}`}
+        keywords={`${course.course_code}, ${course.course_name}, UIU ${course.course_code}, UIU CSE, United International University CSE`}
       />
       <Link
         to={`/trimester/${course.trimester}`}

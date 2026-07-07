@@ -8,8 +8,9 @@ export function About() {
     <div className="mx-auto max-w-3xl px-6 py-12">
       <SEO
         title="About"
-        description="Learn about Acadexa - an open-source educational resource archive for university students, built by CSE students for CSE students."
+        description="Learn about Acadexa (UIU Acadex) - an open-source educational resource archive for UIU CSE students at United International University, built by CSE students for CSE students."
         url="/about"
+        keywords="about UIU acadex, about Acadexa, UIU CSE resources, United International University resources"
       />
       <SectionTitle subtitle="An open-source educational resource archive for university students.">
         About Acadex

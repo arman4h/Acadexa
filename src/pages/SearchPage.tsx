@@ -31,8 +31,9 @@ export function SearchPage() {
     <div className="mx-auto max-w-6xl px-6 py-12">
       <SEO
         title="Search Courses"
-        description="Search for CSE courses by name or course code at Acadexa."
+        description="Search for UIU CSE courses by name or course code. Find playlists, notes, question banks and study resources at United International University."
         url="/search"
+        keywords="UIU course search, UIU CSE search, United International University courses, find UIU courses"
       />
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-[#1F2937] dark:text-slate-100 mb-1">Search Courses</h1>

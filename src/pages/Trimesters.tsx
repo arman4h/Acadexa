@@ -11,9 +11,10 @@ export function Trimesters() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
       <SEO
-        title="Trimesters"
-        description="Browse all trimesters and find the courses you need at Acadexa."
+        title="All Trimesters"
+        description="Browse all trimesters at UIU CSE. Find courses, playlists, notes, question banks and study resources for each trimester at United International University."
         url="/trimesters"
+        keywords="UIU trimesters, UIU CSE trimesters, United International University trimesters, UIU course schedule, CSE courses UIU"
       />
       <SectionTitle subtitle="Browse all trimesters and find the courses you need.">
         Trimesters
